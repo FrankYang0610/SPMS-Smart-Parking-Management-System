@@ -1,4 +1,4 @@
 //
-// console.c
-// The Console
+// output.c
+// The Output Module (Part III)
 //
