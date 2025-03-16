@@ -5,6 +5,13 @@
 
 #include "input.h"
 
+#include <stdbool.h>
+
+Request fetch_input() {
+    Request res;
+    return res;
+}
+
 char** parse(char* input) {
     if (input == NULL || strlen(input) == 0) {
         return NULL;

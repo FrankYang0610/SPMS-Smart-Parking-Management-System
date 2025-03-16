@@ -12,6 +12,35 @@
 #include <string.h>
 #define BUFFER_SIZE 512
 
+typedef struct Time {
+    int y, m, d;
+    int hour, min;
+} Time;
+
+typedef enum RequestType {
+    PARKING,
+    RESERVATION,
+    EVENT,
+    ESSENTIALS,
+    BATCH
+} RequestType;
+
+typedef enum EssentialType {
+    BATTERY_CABLE,
+    LOCKER_UMBRELLA,
+    INFLATION_VALET
+} EssentialType;
+
+typedef struct Request { 
+    Time start, end;
+    RequestType type;
+    bool parking; // need parking or not
+    EssentialType essential;
+} Request;
+
+
+Request fetch_input();
+
 // ========== The Parser ========== //
 char** parse(char*);
 
