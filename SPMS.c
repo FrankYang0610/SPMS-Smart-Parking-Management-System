@@ -9,12 +9,23 @@
 // JIN Yixiao
 //
 
-#include "parser.h"
+#include "input.h"
+#include "output.h"
 #include "utils.h"
 #include "scheduler.h"
+#include "analyzer.h"
 
-#include <stdio.h>
 #include <string.h>
+
+typedef struct Time {
+    int y, m, d;
+    int hour, min;
+} Time;
+
+typedef struct Request { 
+    Time start, end;
+
+} Request;
 
 int main() { 
 
