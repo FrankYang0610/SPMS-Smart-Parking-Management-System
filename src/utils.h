@@ -12,15 +12,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-static const char* SEP_CHARS = " \t\n\v\f\r";
+#include "input.h"
 
-static bool is_separator(const char);
+// static const char* SEP_CHARS = " \t\n\v\f\r";
+
+// static bool is_separator(const char);
 
 /*
  * Returns the stripped string of the original string
  * Strip means to remove the prefix and suffix spacers. For example, strip("   str  ") = "str".
  */
-char* strip(const char*);
+void strip(char*);
 
 /*
  * Returns the split segments of a string. The split delimiters are " ", \t, \n, \v, \f and \r.
@@ -28,6 +30,16 @@ char* strip(const char*);
  * This function is for the parser, where the input string should be stripped.
  * Use strip() to strip the input string before call this function.
  */
-char** split(const char*, size_t*);
+char** split(const char*);
+
+bool compare(const char*, const char*);
+
+int parse_time(const char*, const char*);
+int parse_duration(const char*);
+char parse_member(const char*);
+bool is_valid_essentials_pair(const char*, const char*);
+const char* get_valid_pair(const char*);
+void add_essential_value(char*, const char*);
+int get_priority(const char*);
 
 #endif //UTILS_H

@@ -1,0 +1,154 @@
+//
+// scheduler.c
+// The Scheduler
+//
+
+#include <assert.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+#include "scheduler.h"
+#include "input.h"
+#include "vector.h"
+#include "state.h"
+
+static bool try_put(int idx, int start, int end, bool parking, char essential, Tracker* tracker);
+static bool try_essentials(SegTree *st, int start, int end, int idx);
+
+bool process_request(Vector* queues[], Request* req) {
+    if (req->terminated) return false;
+    for (int i = 0; i < 3; i++) vector_add(queues[i], *req);
+    return true;
+}
+
+bool process_batch(Vector* queues[], Request* req, Statistics* stats[], Tracker* trackers[], int* invalid_cnt) {
+    // read the batch file
+    // parse the batch file
+    // add the requests to the queue
+
+    const char* file = req->file;
+    FILE* fp = fopen(file, "r");
+
+    if (fp == NULL) {
+        printf("Error: Cannot open the batch file %s\n", file);
+        return true;
+    }
+    
+    while (!feof(fp)) {
+        Request rq = file_input(fp);
+        bool is_running;
+        switch (rq.type) {
+            case BATCH:
+                is_running = process_batch(queues, &rq, stats, trackers, invalid_cnt);
+                break;
+            case NORMAL:
+                is_running = process_request(queues, &rq);
+                break;
+            case PRINT:
+                print_bookings(queues, stats, trackers, invalid_cnt);
+                break;
+            case INVALID:
+                (*invalid_cnt)++;
+                break;
+        }
+        if (!is_running) {
+            fclose(fp);
+            return false;
+        }
+    }
+
+    return true;
+}
+
+void run_all(Vector* queues[], Statistics* stats[], Tracker* trackers[]) {
+    run_fcfs(queues[0], stats[0], trackers[0]);
+    run_prio(queues[1], stats[1], trackers[1]);
+    run_opti(queues[2], stats[2], trackers[2]);
+}
+
+void run_fcfs(Vector* queue, Statistics* stats, Tracker* tracker) {
+    if (queue->size == queue->next) return;
+    for (int i = queue->next; i < queue->size; i++) {
+        Request req = queue->data[i];
+        int start = req.start;
+        int end = start + req.duration;
+        if (try_put(i, start, end, req.parking, req.essential, tracker)) { 
+            stats->accepted.data[stats->accepted.size++] = req;
+        } else {
+            stats->rejected.data[stats->rejected.size++] = req;
+        }
+    }
+    queue->next = (int)(queue->size);
+}
+
+void run_prio(Vector* queue, Statistics* stats, Tracker* tracker) {
+    if (queue->size == queue->next) return;
+    int l = queue->next;
+    int r = queue->size - 1;
+    vector_qsort(queue, l, r, cmp_priority);
+    for (int i = queue->next; i < queue->size; i++) {
+        Request req = queue->data[i];
+        int start = req.start;
+        int end = start + req.duration;
+        if (try_put(i, start, end, req.parking, req.essential, tracker)) { 
+            stats->accepted.data[stats->accepted.size++] = req;
+        } else {
+            stats->rejected.data[stats->rejected.size++] = req;
+        }
+    }
+    queue->next = queue->size;
+}
+
+void run_opti(Vector* queue, Statistics* stats, Tracker* tracker) {
+    // NOT IMPLEMENTED
+    // surpress unused warning
+    (void)queue;
+    (void)stats;
+    (void)tracker;
+}
+
+static bool try_put (int idx, int start, int end, bool parking, char essential, Tracker* tracker) {
+
+    /* Try Parking */
+
+    if (parking) { // needs parking
+        int query_res[10];
+        segtree_range_query(tracker->park, start, end, query_res);
+        for (int i = 0; i < 10; i++) {
+            if (query_res[i] == 0) {
+                // the segment tree is set to the index of the queue. 
+                // This allow us to know which request is occupying the parking slot during printBooking.
+                segtree_range_set(tracker->park, (unsigned)i, start, end, idx);
+                break;
+            }
+            if (i == 9) return false;
+        }
+    }
+
+    /* Try Essentials */
+
+    if ((essential & 0b100) && !try_essentials(tracker->bc, start, end, idx))
+        return false; // battery + cable
+
+    if ((essential & 0b010) && !try_essentials(tracker->lu, start, end, idx))
+        return false; // locker + umbrella
+    
+    if ((essential & 0b001) && !try_essentials(tracker->vi, start, end, idx))
+        return false; // valet parking + inflation services
+
+
+    return true;
+}
+
+static bool try_essentials(SegTree *st, int start, int end, int idx) {
+    int query_res[3];
+    segtree_range_query(st, start, end, query_res);
+    for (int i = 0; i < 3; i++) {
+        if (query_res[i] == 0) {
+            segtree_range_set(st, (unsigned)i, start, end, idx);
+            break;
+        }
+        if (i == 2) return false;
+    }
+    return true;
+}

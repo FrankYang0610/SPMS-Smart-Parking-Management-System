@@ -1,4 +1,0 @@
-//
-// scheduler.c
-// The Scheduler
-//

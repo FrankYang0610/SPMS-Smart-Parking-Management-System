@@ -17,4 +17,5 @@ build/
 compile.sh 
 .idea/
 
-
+.DS_Store
+.vscode/
