@@ -11,27 +11,17 @@
 
 #include "input.h"
 #include "output.h"
-#include "utils.h"
 #include "scheduler.h"
 #include "state.h"
-#include "analyzer.h"
 
-#include <unistd.h>
 #include <stdlib.h>
-#include <sys/wait.h>
-#include <fcntl.h>
-#include <sys/select.h>
-#include <signal.h>
 #include <stdbool.h>
 
 int main() {
-    bool is_running = true; 
-    
     int invalid_cnt = 0;
-    Statistics* stats[3]; // fcfs, prio, opti
-    Vector* queues[3]; // fcfs, prio, opti
-    Tracker* trackers[3]; // fcfs, prio, opti
-    Request req;
+    Statistics* stats[3];   // fcfs, prio, opti
+    Vector* queues[3];      // fcfs, prio, opti
+    Tracker* trackers[3];   // fcfs, prio, opti
 
     for (int i = 0; i < 3; i++) {
         stats[i] = malloc(sizeof(Statistics));
@@ -43,25 +33,33 @@ int main() {
     }
 
     printf("~~ WELCOME TO PolyU ~~\n");
+
     while (true) {
-        req = fetch_input();
+        Request req = fetch_input();
         
         switch (req.type) {
+            case BATCH: {
+                bool is_termination = process_batch(queues, &req, stats, trackers, &invalid_cnt);
+                if (is_termination) {
+                    req.type = TERMINTATE;
+                }
+            }
+            case TERMINTATE:
+                printf("Bye!");
+                return EXIT_SUCCESS;
             case PRINT:
                 print_bookings(queues, stats, trackers, &invalid_cnt);
                 break;
-            case BATCH:
-                is_running = process_batch(queues, &req, stats, trackers, &invalid_cnt);
-                break;
             case NORMAL:
-                is_running = process_request(queues, &req);
+                process_request(queues, &req);
                 break;
             case INVALID:
                 invalid_cnt++;
                 break;
+            default:
+                break;
         }
-
-        if (!is_running) break;
     }
-    return 0;
+
+    return EXIT_SUCCESS;
 }

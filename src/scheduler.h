@@ -6,12 +6,12 @@
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
 
-#include "analyzer.h"
+#include "output.h"
 #include "segtree.h"
 #include "utils.h"
 #include "state.h"
 
-bool process_request(Vector* queues[], Request* req);
+void process_request(Vector* queues[], Request* req);
 bool process_batch(Vector* queues[], Request* req, Statistics* stats[], Tracker* trackers[], int* invalid_cnt);
 
 void run_all(Vector* queue[], Statistics* stats[], Tracker* trackers []);

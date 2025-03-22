@@ -23,16 +23,16 @@ Request file_input(FILE* file) {
 }
 
 Request preprocess_input(char* input) {
-    Request req;
+    Request req = {UNDEFINED}; // or use {.type = UNDEFINED} in C99 and later.
+
     strip(input);
-    printf("DEBUG: strip success: %s\n", input);
+    printf("DEBUG: strip success: \"%s\"\n", input);
 
     char **result = split(input);
     printf("DEBUG: split success. TOKENS: \n");
     for (int i = 0; i < 8 && result[i]; i++) {
-        printf("Token %d: %s\n", i,result[i]);
+        printf("Token %d: \"%s\"\n", i,result[i]);
     }
-
 
     char tokens[8][100];
     for (int i = 0; i < 8 && result[i]; i++) {
@@ -41,8 +41,12 @@ Request preprocess_input(char* input) {
         free(result[i]);
     }
     free(result);
-    req.terminated = compare(tokens[0], "endProgram");
-    if (req.terminated) return req;
+
+    if (compare(tokens[0], "endProgram")) {
+        req.type = TERMINTATE;
+        return req;
+    }
+
     parse_input(tokens, &req);
     return req;
 }
@@ -85,19 +89,19 @@ void parse_input(const char tokens[8][100], Request* req) {
 
     if (member == 0) {
         req->type = INVALID;
-        printf("Invalid Member: %s", tokens[1]);
+        printf("Invalid Member: %s\n", tokens[1]);
         return;
     }
 
     if (start == -1) {
         req->type = INVALID;
-        printf("Invalid Time: %s %s", tokens[2], tokens[3]);
+        printf("Invalid Time: %s %s\n", tokens[2], tokens[3]);
         return;
     }
 
     if (duration == -1) {
         req->type = INVALID;
-        printf("Invalid Duration: %s", tokens[4]);
+        printf("Invalid Duration: %s\n", tokens[4]);
         return; 
     }
 
@@ -113,17 +117,17 @@ void parse_input(const char tokens[8][100], Request* req) {
         const char* ccc = tokens[6];
 
         int essentials_cnt = (bool)(strlen(bbb)) + (bool)(strlen(ccc)); // how many essnetials parameter
-        printf("DEBUG: addParking pre");
+        printf("DEBUG: addParking pre\n");
 
         if (get_valid_pair(bbb) == NULL) {
             req->type = INVALID;
-            printf("Invalid Essential Item: %s", bbb);
+            printf("Invalid Essential Item: %s\n", bbb);
             return;
         }
 
         if (essentials_cnt == 2 && !is_valid_essentials_pair(bbb, ccc)) {
             req->type = INVALID;
-            printf("Invalid Essentials Pair: %s %s", bbb, ccc);
+            printf("Invalid Essentials Pair: %s %s\n", bbb, ccc);
             return;
         }
 
@@ -145,13 +149,13 @@ void parse_input(const char tokens[8][100], Request* req) {
 
         if (essentials_cnt != 2) {
             req->type = INVALID;
-            printf("Invalid Number of Essentials: Received %d", essentials_cnt);
+            printf("Invalid Number of Essentials: Received %d\n", essentials_cnt);
             return;
         }
 
         if (!is_valid_essentials_pair(bbb, ccc)) {
             req->type = INVALID;
-            printf("Invalid Essentials Pair: %s %s", bbb, ccc);
+            printf("Invalid Essentials Pair: %s %s\n", bbb, ccc);
             return;
         }
 
@@ -168,7 +172,7 @@ void parse_input(const char tokens[8][100], Request* req) {
         for (int i = 5; i <= 7; i++) {
             if (tokens[i][0] && get_valid_pair(tokens[i]) == NULL) {
                 req->type = INVALID;
-                printf("Invalid Essential Item: %s", tokens[i]);
+                printf("Invalid Essential Item: %s\n", tokens[i]);
                 return;
             }
         }
@@ -193,7 +197,7 @@ void parse_input(const char tokens[8][100], Request* req) {
         const char* bbb = tokens[5];
         if (get_valid_pair(bbb) == NULL) {
             req->type = INVALID;
-            printf("Invalid Essential Item: %s", bbb);
+            printf("Invalid Essential Item: %s\n", bbb);
             return;
         }
 
@@ -203,6 +207,6 @@ void parse_input(const char tokens[8][100], Request* req) {
         return;
     }
 
-    printf("Unrecognized Command: %s", type);
+    printf("Unrecognized Command: %s\n", type);
     req->type = INVALID;
 }

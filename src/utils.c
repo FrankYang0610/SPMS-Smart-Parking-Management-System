@@ -27,7 +27,7 @@ char** split(const char* str) {
 
 void strip(char* str) {
     int n = (int)strlen(str);
-    printf("strippping %s\n", str);
+    printf("stripping \"%s\"\n", str);
     int i = 0, pre = 0;
     while (str[pre] == ' ') pre++;
     for (i = pre; i < n && str[i] != ';'; i++) {

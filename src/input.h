@@ -19,17 +19,18 @@ typedef struct Time {
 } Time;
 
 typedef enum RequestType {
-    PRINT, // printBookings
-    BATCH, // addBatch
-    NORMAL, // addReservation, addEvent, bookEssentials, etc.
+    UNDEFINED,  // undefined
+    TERMINTATE, // endProgram
+    PRINT,      // printBookings
+    BATCH,      // addBatch
+    NORMAL,     // addReservation, addEvent, bookEssentials, etc.
     INVALID
 } RequestType;
 
 
 /**
  * Struct type for storing various information of a request.
- * 
- * @param terminated    Whether the request is terminated
+ *
  * @param type          The type of the request (PRINT, BATCH, NORMAL, INVALID)
  * @param member        The member who made the request (A, B, C, ...)
  * @param start         The starting time of the request (int, in minutes)
@@ -42,7 +43,6 @@ typedef enum RequestType {
  * 
  */
 typedef struct Request {
-    bool terminated;
     RequestType type;
     char member; // 'A', 'B', 'C' ... 
     int start; 

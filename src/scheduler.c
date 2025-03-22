@@ -15,10 +15,8 @@
 static bool try_put(int idx, int start, int end, bool parking, char essential, Tracker* tracker);
 static bool try_essentials(SegTree *st, int start, int end, int idx);
 
-bool process_request(Vector* queues[], Request* req) {
-    if (req->terminated) return false;
+void process_request(Vector* queues[], Request* req) {
     for (int i = 0; i < 3; i++) vector_add(queues[i], *req);
-    return true;
 }
 
 bool process_batch(Vector* queues[], Request* req, Statistics* stats[], Tracker* trackers[], int* invalid_cnt) {
@@ -36,13 +34,19 @@ bool process_batch(Vector* queues[], Request* req, Statistics* stats[], Tracker*
     
     while (!feof(fp)) {
         Request rq = file_input(fp);
-        bool is_running;
+
         switch (rq.type) {
-            case BATCH:
-                is_running = process_batch(queues, &rq, stats, trackers, invalid_cnt);
-                break;
+            case BATCH: {
+                bool is_termination = process_batch(queues, &rq, stats, trackers, invalid_cnt);
+                if (is_termination) {
+                    rq.type = TERMINTATE;
+                }
+            }
+            case TERMINTATE:
+                fclose(fp);
+                return false;
             case NORMAL:
-                is_running = process_request(queues, &rq);
+                process_request(queues, &rq);
                 break;
             case PRINT:
                 print_bookings(queues, stats, trackers, invalid_cnt);
@@ -50,15 +54,14 @@ bool process_batch(Vector* queues[], Request* req, Statistics* stats[], Tracker*
             case INVALID:
                 (*invalid_cnt)++;
                 break;
-        }
-        if (!is_running) {
-            fclose(fp);
-            return false;
+            default:
+                break;
         }
     }
 
     return true;
 }
+
 
 void run_all(Vector* queues[], Statistics* stats[], Tracker* trackers[]) {
     run_fcfs(queues[0], stats[0], trackers[0]);
@@ -101,13 +104,13 @@ void run_prio(Vector* queue, Statistics* stats, Tracker* tracker) {
 
 void run_opti(Vector* queue, Statistics* stats, Tracker* tracker) {
     // NOT IMPLEMENTED
-    // surpress unused warning
+    // suppress unused warning
     (void)queue;
     (void)stats;
     (void)tracker;
 }
 
-static bool try_put (int idx, int start, int end, bool parking, char essential, Tracker* tracker) {
+static bool try_put(int idx, int start, int end, bool parking, char essential, Tracker* tracker) {
 
     /* Try Parking */
 
