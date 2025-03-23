@@ -31,7 +31,7 @@ Request preprocess_input(char* input) {
     char **result = split(input);
     printf("DEBUG: split success. TOKENS: \n");
     for (int i = 0; i < 8 && result[i]; i++) {
-        printf("Token %d: \"%s\"\n", i,result[i]);
+        printf("\tToken %d: \"%s\"\n", i,result[i]);
     }
 
     char tokens[8][100];

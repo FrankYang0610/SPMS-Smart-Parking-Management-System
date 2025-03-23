@@ -1,6 +1,6 @@
 //
 // scheduler.c
-// The Scheduler
+// The Scheduling Module (Part II)
 //
 
 #include <assert.h>
@@ -102,14 +102,16 @@ void run_prio(Vector* queue, Statistics* stats, Tracker* tracker) {
     queue->next = queue->size;
 }
 
+// TODO: Implement Optimized Scheduling Algorithm
 void run_opti(Vector* queue, Statistics* stats, Tracker* tracker) {
-    // NOT IMPLEMENTED
-    // suppress unused warning
     (void)queue;
     (void)stats;
     (void)tracker;
 }
 
+
+// Try to response a request.
+// This function will process both parking request and essential request(s).
 static bool try_put(int idx, int start, int end, bool parking, char essential, Tracker* tracker) {
 
     /* Try Parking */
@@ -120,7 +122,7 @@ static bool try_put(int idx, int start, int end, bool parking, char essential, T
         for (int i = 0; i < 10; i++) {
             if (query_res[i] == 0) {
                 // the segment tree is set to the index of the queue. 
-                // This allow us to know which request is occupying the parking slot during printBooking.
+                // This allows us to know which request is occupying the parking slot during printBooking.
                 segtree_range_set(tracker->park, (unsigned)i, start, end, idx);
                 break;
             }
@@ -130,19 +132,23 @@ static bool try_put(int idx, int start, int end, bool parking, char essential, T
 
     /* Try Essentials */
 
+    // battery + cable
     if ((essential & 0b100) && !try_essentials(tracker->bc, start, end, idx))
-        return false; // battery + cable
+        return false;
 
+    // locker + umbrella
     if ((essential & 0b010) && !try_essentials(tracker->lu, start, end, idx))
-        return false; // locker + umbrella
-    
-    if ((essential & 0b001) && !try_essentials(tracker->vi, start, end, idx))
-        return false; // valet parking + inflation services
+        return false;
 
+    // valet parking + inflation services
+    if ((essential & 0b001) && !try_essentials(tracker->vi, start, end, idx))
+        return false;
 
     return true;
 }
 
+// This function will process a kind of essential.
+// The argument SegTree *st is the corresponding segment tree of the essential.
 static bool try_essentials(SegTree *st, int start, int end, int idx) {
     int query_res[3];
     segtree_range_query(st, start, end, query_res);

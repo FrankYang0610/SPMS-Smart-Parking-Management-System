@@ -6,8 +6,8 @@
 #include "state.h"
 #include "vector.h"
 
+// TODO: Implement the Output Module
 void print_bookings(Vector* queues[], Statistics* stats[], Tracker* trackers[], int* invalid_cnt) {
-    // UNIMPLEMENTED
     (void)queues;
     (void)stats;
     (void)trackers;
