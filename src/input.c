@@ -23,9 +23,9 @@ Request file_input(FILE* file) {
 }
 
 Request preprocess_input(char* input) {
-    Request req = {UNDEFINED}; // or use {.type = UNDEFINED} in C99 and later.
+    Request req = {INVALID}; // or use {.type = INVALID} in C99 and later.
 
-    strip_no_semicolon(input); // TODO: change
+    strip_no_semicolon(input); // TODO: revise the strip() function here later
     printf("DEBUG: strip success: \"%s\"\n", input);
 
     char **result = split(input);

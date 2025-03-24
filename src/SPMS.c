@@ -17,6 +17,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+// TODO: use `fork()`, `exec()`, `pipe()` or `mkfifo()`?
+
 int main() {
     int invalid_cnt = 0;
     Statistics* stats[3];   // fcfs, prio, opti
@@ -52,8 +54,15 @@ int main() {
                 break;
             case REQUEST:
                 process_request(queues, &req);
+                // Online scheduling algorithms
+                run_fcfs(queues[0], stats[0], trackers[0]);
+                run_prio(queues[1], stats[1], trackers[1]);
+                // Offline scheduling algorithms
+                // TODO: further discussion on the optimal scheduler.
+                // run_opti(queues[2], stats[2], trackers[2]);
                 break;
             case INVALID:
+                printf("The request is invalid. Please check and try again!\n");
                 invalid_cnt++;
                 break;
             default:

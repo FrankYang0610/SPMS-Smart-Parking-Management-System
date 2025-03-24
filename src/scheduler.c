@@ -82,6 +82,7 @@ void run_fcfs(Vector* queue, Statistics* stats, Tracker* tracker) {
         }
     }
     queue->next = (int)(queue->size);
+    printf("The FCFS scheduler is updated.\n");
 }
 
 void run_prio(Vector* queue, Statistics* stats, Tracker* tracker) {
@@ -100,6 +101,7 @@ void run_prio(Vector* queue, Statistics* stats, Tracker* tracker) {
         }
     }
     queue->next = queue->size;
+    printf("The PRIO scheduler is updated.\n");
 }
 
 // TODO: Implement Optimized Scheduling Algorithm
@@ -107,6 +109,7 @@ void run_opti(Vector* queue, Statistics* stats, Tracker* tracker) {
     (void)queue;
     (void)stats;
     (void)tracker;
+    printf("The OPTI scheduler is updated.\n");
 }
 
 
@@ -120,7 +123,7 @@ static bool try_put(int idx, int start, int end, bool parking, char essential, T
         int query_res[10];
         segtree_range_query(tracker->park, start, end, query_res);
         for (int i = 0; i < 10; i++) {
-            if (query_res[i] == 0) {
+            if (query_res[i] != 0) {
                 // the segment tree is set to the index of the queue. 
                 // This allows us to know which request is occupying the parking slot during printBooking.
                 segtree_range_set(tracker->park, (unsigned)i, start, end, idx);
@@ -129,6 +132,7 @@ static bool try_put(int idx, int start, int end, bool parking, char essential, T
             if (i == 9) return false;
         }
     }
+
 
     /* Try Essentials */
 
@@ -153,7 +157,7 @@ static bool try_essentials(SegTree *st, int start, int end, int idx) {
     int query_res[3];
     segtree_range_query(st, start, end, query_res);
     for (int i = 0; i < 3; i++) {
-        if (query_res[i] == 0) {
+        if (query_res[i] != 0) {
             segtree_range_set(st, (unsigned)i, start, end, idx);
             break;
         }
