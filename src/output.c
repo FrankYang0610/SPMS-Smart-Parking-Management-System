@@ -9,13 +9,15 @@
 
 // In this project, we assume there are only five members.
 // See the instruction document, Page 6.
-#define MEMBERS_CNT  5
+#define MEMBERS_CNT     5
 
-#define DATE_LEN    12
-#define START_LEN   8
-#define END_LEN     8
-#define TYPE_LEN    13
-#define DEVICE_LEN  29
+#define DATE_LEN        12
+#define START_LEN       8
+#define END_LEN         8
+#define TYPE_LEN        13
+#define DEVICE_LEN      29
+
+#define TOTAL_MINUTES   8640  // 6 * 1440
 
 
 static void print_header() {
@@ -260,10 +262,12 @@ print_booking(char* algo_name, Statistics* stat) {
 
 void
 print_algorithm_report(const char* algo_name, Statistics* stat, const int invalid_cnt) {
+    printf(" For %s:\n", algo_name);
+
     int received_cnt = stat->accepted.size + stat->rejected.size;
 
     if (received_cnt > 0) {
-        printf("         Total Number of Booking Received: %d\n", received_cnt);
+        printf("         Total Number of Booking Received: %d (100.00%%)\n", received_cnt);
 
         printf("         Total Number of Booking Assigned: %d (%.2f%%)\n",
             stat->accepted.size,
@@ -280,8 +284,39 @@ print_algorithm_report(const char* algo_name, Statistics* stat, const int invali
 
     printf("\n");
 
+
+    // Utilization of Time Slot
+
+    double rate_parking = 0.0;
+    double rate_battery_cable = 0.0;
+    double rate_locker_umbrella = 0.0;
+    double rate_inflation_service_valet_parking = 0.0;
+
+    Vector *accepted = &stat->accepted;
+    size_t size = accepted->size;
+    for (int i = 0; i < size; i++) {
+        Request* req = &accepted->data[i];
+        int duration = req->duration;
+
+        if (req->parking) { rate_parking += duration; }
+        if (req->essential & 0b100) { rate_battery_cable += duration; }
+        if (req->essential & 0b010) { rate_locker_umbrella += duration; }
+        if (req->essential & 0b001) { rate_inflation_service_valet_parking += duration; }
+    }
+
+    rate_parking /= TOTAL_MINUTES;
+    rate_battery_cable /= TOTAL_MINUTES;
+    rate_locker_umbrella /= TOTAL_MINUTES;
+    rate_inflation_service_valet_parking /= TOTAL_MINUTES;
+
     printf("         Utilization of Time Slot:\n");
-    printf("               Data Unavailable.\n");
+    printf("               Parking:           - %.2f%%\n", rate_parking * 100.00);
+    printf("               Battery:           - %.2f%%\n", rate_battery_cable * 100.00);
+    printf("               Cable:             - %.2f%%\n", rate_battery_cable * 100.00);
+    printf("               Locker:            - %.2f%%\n", rate_locker_umbrella * 100.00);
+    printf("               Umbrella:          - %.2f%%\n", rate_locker_umbrella * 100.00);
+    printf("               Inflation Service: - %.2f%%\n", rate_inflation_service_valet_parking * 100.00);
+    printf("               Valet Parking:     - %.2f%%\n", rate_inflation_service_valet_parking * 100.00);
 
     printf("\n");
 
@@ -301,15 +336,13 @@ print_summary_report(Vector* queues[], Statistics* stats[], Tracker* trackers[],
     printf("*** Parking Booking Manager - Summary Report ***\n\n");
     printf("Performance:\n\n");
 
-    printf(" For FCFS:\n");
     print_algorithm_report("FCFS", stats[0], invalid_cnt);
 
-    printf(" For PRIO:\n");
     print_algorithm_report("PRIO", stats[1], invalid_cnt);
 
-    printf(" For OPTI:\n");
-    printf("         Data Unavailable.\n");
+    // TODO: Implement the OPTI scheduling algorithm.
     // print_algorithm_report("OPTI", stats[2], invalid_cnt);
+    // printf("         Data Unavailable.\n");
 
     printf("\n");
 }
