@@ -18,6 +18,8 @@
 
 // static bool is_separator(const char);
 
+void strip_no_semicolon(char*);
+
 /*
  * Returns the stripped string of the original string
  * Strip means to remove the prefix and suffix spacers. For example, strip("   str  ") = "str".

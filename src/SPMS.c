@@ -41,16 +41,16 @@ int main() {
             case BATCH: {
                 bool is_termination = process_batch(queues, &req, stats, trackers, &invalid_cnt);
                 if (is_termination) {
-                    req.type = TERMINTATE;
+                    req.type = TERMINATE;
                 }
             }
-            case TERMINTATE:
+            case TERMINATE:
                 printf("Bye!");
                 return EXIT_SUCCESS;
             case PRINT:
-                print_bookings(queues, stats, trackers, &invalid_cnt);
+                print_bookings(req.algo, queues, stats, trackers, &invalid_cnt);
                 break;
-            case NORMAL:
+            case REQUEST:
                 process_request(queues, &req);
                 break;
             case INVALID:

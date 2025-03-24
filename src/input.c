@@ -25,7 +25,7 @@ Request file_input(FILE* file) {
 Request preprocess_input(char* input) {
     Request req = {UNDEFINED}; // or use {.type = UNDEFINED} in C99 and later.
 
-    strip(input);
+    strip_no_semicolon(input); // TODO: change
     printf("DEBUG: strip success: \"%s\"\n", input);
 
     char **result = split(input);
@@ -43,7 +43,7 @@ Request preprocess_input(char* input) {
     free(result);
 
     if (compare(tokens[0], "endProgram")) {
-        req.type = TERMINTATE;
+        req.type = TERMINATE;
         return req;
     }
 
@@ -54,7 +54,7 @@ Request preprocess_input(char* input) {
 
 void parse_input(const char tokens[8][100], Request* req) {
     const char* type = tokens[0];
-    
+
     
     // special requests
     if (compare(type, "addBatch")) {
@@ -80,7 +80,7 @@ void parse_input(const char tokens[8][100], Request* req) {
     // priority: Event > Reservation > Parking > Essentials
     // use convention: priority value smaller is higher priority
     req->priority = get_priority(type);
-    req->type = NORMAL;
+    req->type = REQUEST;
 
     char member = parse_member(tokens[1]); // member = 'A', 'B', 'C' ...
     int start = parse_time(tokens[2], tokens[3]); // YYYY-MM-DD, hh:mm

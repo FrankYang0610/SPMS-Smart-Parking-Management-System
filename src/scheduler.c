@@ -39,17 +39,17 @@ bool process_batch(Vector* queues[], Request* req, Statistics* stats[], Tracker*
             case BATCH: {
                 bool is_termination = process_batch(queues, &rq, stats, trackers, invalid_cnt);
                 if (is_termination) {
-                    rq.type = TERMINTATE;
+                    rq.type = TERMINATE;
                 }
             }
-            case TERMINTATE:
+            case TERMINATE:
                 fclose(fp);
                 return false;
-            case NORMAL:
+            case REQUEST:
                 process_request(queues, &rq);
                 break;
             case PRINT:
-                print_bookings(queues, stats, trackers, invalid_cnt);
+                print_bookings(req->algo, queues, stats, trackers, invalid_cnt);
                 break;
             case INVALID:
                 (*invalid_cnt)++;

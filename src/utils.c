@@ -7,6 +7,26 @@
 
 /* GENERIC STRING MANIPULATION */
 
+// using isspace() to cover all delimiters (' ', \f, \t, \n, \r, \v, etc.)
+void strip_no_semicolon(char* str) {
+    if (str == NULL || *str == '\0') return;
+
+    char* start = str;
+    while (isspace(*start)) {
+        start++;
+    }
+
+    char* end = str + strlen(str) - 1;
+    while (end > start && isspace(*end) && *end != ';') {
+        end--;
+    }
+    if (*end == ';') end--;
+
+    size_t len = end - start + 1;
+    memmove(start, start, len);
+    str[len] = '\0';
+}
+
 char** split(const char* str) {
     char** res = (char**)malloc(sizeof(char*) * 8);
     for (int i = 0; i < 8; i++) {
@@ -25,6 +45,7 @@ char** split(const char* str) {
     return res;
 }
 
+[[deprecated("Use strip_no_semicolon() instead")]]
 void strip(char* str) {
     int n = (int)strlen(str);
     printf("stripping \"%s\"\n", str);

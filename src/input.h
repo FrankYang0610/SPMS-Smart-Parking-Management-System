@@ -20,10 +20,10 @@ typedef struct Time {
 
 typedef enum RequestType {
     UNDEFINED,  // undefined
-    TERMINTATE, // endProgram
+    TERMINATE,  // endProgram
     PRINT,      // printBookings
     BATCH,      // addBatch
-    NORMAL,     // addReservation, addEvent, bookEssentials, etc.
+    REQUEST,    // addReservation, addEvent, bookEssentials, etc.
     INVALID
 } RequestType;
 
