@@ -49,7 +49,7 @@ bool process_batch(Vector* queues[], Request* req, Statistics* stats[], Tracker*
                 process_request(queues, &rq);
                 break;
             case PRINT:
-                print_bookings(req->algo, queues, stats, trackers, invalid_cnt);
+                print_bookings(req->algo, queues, stats, trackers, *invalid_cnt);
                 break;
             case INVALID:
                 (*invalid_cnt)++;

@@ -17,30 +17,6 @@
 #define TYPE_LEN    13
 #define DEVICE_LEN  29
 
-// Adjust the string into a fixed size of `fixed_len`.
-// call free() when the adjusted string is out of use!
-char* adjust_string(const char* str, size_t fixed_len) {
-    char *result = malloc(fixed_len + 1);
-    if (result == NULL) {
-        perror("failed to allocate memory");
-        return NULL;
-    }
-
-    size_t len = strlen(str);
-
-    if (len < fixed_len) { // copy and padding
-        strncpy(result, str, len);
-        for (size_t i = len; i < fixed_len; i++) {
-            result[i] = ' ';
-        }
-    } else { // copy and cut
-        strncpy(result, str, fixed_len);
-    }
-
-    result[fixed_len] = '\0';
-    return result;
-}
-
 
 static void print_header() {
     printf("Date         Start    End      Type          Device                        \n");
@@ -49,10 +25,6 @@ static void print_header() {
 
 static void print_divider() {
     printf("\n... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...\n\n");
-}
-
-static void print_new_device_line() {
-    printf("                                             ");
 }
 
 static void print_no_record() {
@@ -81,7 +53,31 @@ char* get_request_typename(const Request* req) {
     }
 }
 
-// quite weird here.
+
+// Adjust the string into a fixed size of `fixed_len`.
+// call free() when the adjusted string is out of use!
+char* adjust_string(const char* str, size_t fixed_len) {
+    char *result = malloc(fixed_len + 1);
+    if (result == NULL) {
+        perror("failed to allocate memory");
+        return NULL;
+    }
+
+    size_t len = strlen(str);
+
+    if (len < fixed_len) { // copy and padding
+        strncpy(result, str, len);
+        for (size_t i = len; i < fixed_len; i++) {
+            result[i] = ' ';
+        }
+    } else { // copy and cut
+        strncpy(result, str, fixed_len);
+    }
+
+    result[fixed_len] = '\0';
+    return result;
+}
+
 // For simplicity, we chose not to apply all OOP principles in this project.
 char* get_date_string(const Request* req) {
     const int total_days = req->start / (24 * 60);
@@ -92,8 +88,7 @@ char* get_date_string(const Request* req) {
     return date_string;
 }
 
-// quite weird here.
-// For simplicity, we chose not to apply all OOP principles in this project.
+// Good implementation
 char* get_start_string(const Request* req) {
     const int remaining_minutes = req->start % (24 * 60);
     const int hour = remaining_minutes / 60;
@@ -104,6 +99,7 @@ char* get_start_string(const Request* req) {
     return start_string;
 }
 
+// Good implementation
 char* get_end_string(const Request* req) {
     const int remaining_minutes = (req->start + req->duration) % (24 * 60);
     const int hour = remaining_minutes / 60;
@@ -198,7 +194,7 @@ process_member(const char member_name, const Vector* stat_vector, int* records_c
                 free(essential_name_adjusted);
 
                 for (int k = 1; k < essential_cnt; k++) {
-                    print_new_device_line();
+                    printf("                                             ");
                     essential_name_adjusted = adjust_string(essential_names[k], DEVICE_LEN);
                     printf("%s \n", essential_name_adjusted);
                     free(essential_name_adjusted);
@@ -210,12 +206,9 @@ process_member(const char member_name, const Vector* stat_vector, int* records_c
 
 
 /**
- *
+ * This function prints the booking information for a specific scheduling algorithm.
  * @param algo_name The name of the scheduling algorithm. 'fcfs', 'prio' and 'opti' are available now.
- * @param queue The processing queue. TODO: need queue here?
  * @param stat The statistics data.
- * @param tracker The trackers. TODO: need tracker here?
- * @param invalid_cnt Invalid requests. TODO: need invalid_cnt here?
  */
 void
 print_booking(char* algo_name, Statistics* stat) {
@@ -266,12 +259,69 @@ print_booking(char* algo_name, Statistics* stat) {
 
 
 void
-print_bookings(char *algo, Vector* queues[], Statistics* stats[], Tracker* trackers[], int* invalid_cnt) {
+print_algorithm_report(const char* algo_name, Statistics* stat, const int invalid_cnt) {
+    int received_cnt = stat->accepted.size + stat->rejected.size;
 
-    bool is_fcfs = strcmp(algo, "fcfs") == 0 || strcmp(algo, "all") == 0;
-    bool is_prio = strcmp(algo, "prio") == 0 || strcmp(algo, "all") == 0;
-    bool is_opti = strcmp(algo, "opti") == 0 || strcmp(algo, "all") == 0;
-    bool is_all = strcmp(algo, "all") == 0;
+    if (received_cnt > 0) {
+        printf("         Total Number of Booking Received: %d\n", received_cnt);
+
+        printf("         Total Number of Booking Assigned: %d (%.2f%%)\n",
+            stat->accepted.size,
+            (double)stat->accepted.size / received_cnt * 100.0
+        );
+
+        printf("         Total Number of Booking Rejected: %d (%.2f%%)\n",
+            stat->rejected.size,
+            (double)stat->rejected.size / received_cnt* 100.0
+        );
+    } else {
+        printf("         No Bookings are Received Currently.\n");
+    }
+
+    printf("\n");
+
+    printf("         Utilization of Time Slot:\n");
+    printf("               Data Unavailable.\n");
+
+    printf("\n");
+
+    printf("         Invalid request(s) made: %d\n", invalid_cnt);
+
+    printf("\n");
+}
+
+/**
+ * This function prints the summary report.
+ * @param queues
+ * @param stats
+ * @param trackers
+ */
+void
+print_summary_report(Vector* queues[], Statistics* stats[], Tracker* trackers[], const int invalid_cnt) {
+    printf("*** Parking Booking Manager - Summary Report ***\n\n");
+    printf("Performance:\n\n");
+
+    printf(" For FCFS:\n");
+    print_algorithm_report("FCFS", stats[0], invalid_cnt);
+
+    printf(" For PRIO:\n");
+    print_algorithm_report("PRIO", stats[1], invalid_cnt);
+
+    printf(" For OPTI:\n");
+    printf("         Data Unavailable.\n");
+    // print_algorithm_report("OPTI", stats[2], invalid_cnt);
+
+    printf("\n");
+}
+
+
+void
+print_bookings(char *algo, Vector* queues[], Statistics* stats[], Tracker* trackers[], const int invalid_cnt) {
+
+    bool is_fcfs = strcmp(algo, "fcfs") == 0 || strcmp(algo, "all") == 0 || strcmp(algo, "ALL") == 0;
+    bool is_prio = strcmp(algo, "prio") == 0 || strcmp(algo, "all") == 0 || strcmp(algo, "ALL") == 0;
+    bool is_opti = strcmp(algo, "opti") == 0 || strcmp(algo, "all") == 0 || strcmp(algo, "ALL") == 0;
+    bool is_all = strcmp(algo, "all") == 0 || strcmp(algo, "ALL") == 0;
 
     if (!is_fcfs && !is_prio && !is_opti && !is_all) {
         printf("Unsupported scheduling algorithm: \"%s\".\n", algo);
@@ -290,7 +340,7 @@ print_bookings(char *algo, Vector* queues[], Statistics* stats[], Tracker* track
     }
 
     if (is_all) {
-        // TODO: print the summary report
+        print_summary_report(queues, stats, trackers, invalid_cnt);
     }
 
     // To suppress warnings
