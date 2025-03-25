@@ -49,7 +49,12 @@ bool process_batch(Vector* queues[], Request* req, Statistics* stats[], Tracker*
                 process_request(queues, &rq);
                 break;
             case PRINT:
-                print_bookings(req->algo, stats, *invalid_cnt);
+                if (fork() == 0) {
+                    printf("A fork() has been called. Here is the child process printing all bookings. pid = %d.\n\n", getpid());
+                    print_bookings(req->algo, stats, *invalid_cnt);
+                } else {
+                    wait(NULL);
+                }
                 break;
             case INVALID:
                 (*invalid_cnt)++;

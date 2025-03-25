@@ -16,8 +16,10 @@
 
 #include <stdlib.h>
 #include <stdbool.h>
+#include <unistd.h>
 
-// TODO: update some function logic with `fork()` and `pipe()`.
+// TODO: update the scheduling logic using `fork()` and `pipe()`.
+// TODO: update the `printBookings`-related logic. Run FCFS and PRIO when a `printBookings` is called.
 
 int main() {
     int invalid_cnt = 0;
@@ -50,7 +52,12 @@ int main() {
                 printf("Bye!");
                 return EXIT_SUCCESS;
             case PRINT:
-                print_bookings(req.algo, stats, invalid_cnt);
+                if (fork() == 0) {
+                    printf("A fork() has been called. Here is the child process printing all bookings. pid = %d.\n\n", getpid());
+                    print_bookings(req.algo, stats, invalid_cnt);
+                } else {
+                    wait(NULL);
+                }
                 break;
             case REQUEST:
                 process_request(queues, &req);
