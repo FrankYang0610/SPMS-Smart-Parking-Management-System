@@ -11,6 +11,8 @@
 #include "utils.h"
 #include "state.h"
 
+#include <stdbool.h>
+
 void process_request(Vector* queues[], Request* req);
 bool process_batch(Vector* queues[], Request* req, Statistics* stats[], Tracker* trackers[], int* invalid_cnt);
 

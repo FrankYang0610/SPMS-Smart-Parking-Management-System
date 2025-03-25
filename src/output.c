@@ -10,6 +10,7 @@
 #include "vector.h"
 
 #include <unistd.h>
+#include <stdbool.h>
 
 
 // In this project, we assume there are only five members.
@@ -80,47 +81,56 @@ char* adjust_string(const char* str, size_t fixed_len) {
     size_t len = strlen(str);
 
     if (len < fixed_len) { // copy and padding
-        strncpy(result, str, len);
+        memcpy(result, str, len);
         for (size_t i = len; i < fixed_len; i++) {
             result[i] = ' ';
         }
     } else { // copy and cut
-        strncpy(result, str, fixed_len);
+        memcpy(result, str, fixed_len);
     }
 
     result[fixed_len] = '\0';
     return result;
 }
 
-// For simplicity, we chose not to apply all OOP principles in this project.
+void get_2_digit_string(char str[], int num) {
+    str[0] = (char)('0' + (num / 10));
+    str[1] = (char)('0' + (num % 10));
+    str[2] = '\0';
+}
+
 char* get_date_string(const Request* req) {
     const int total_days = req->start / (24 * 60);
-    const int day = 10 + total_days;
-
+    char day[3];
+    get_2_digit_string(day, 10 + total_days);
     char* date_string = malloc(11);
-    sprintf(date_string, "2025-05-%02d", day);
+    sprintf(date_string, "2025-05-%s", day);
     return date_string;
 }
 
 // Good implementation
 char* get_start_string(const Request* req) {
     const int remaining_minutes = req->start % (24 * 60);
-    const int hour = remaining_minutes / 60;
-    const int minute = remaining_minutes % 60;
+
+    char hour[3], minute[3];
+    get_2_digit_string(hour, remaining_minutes / 60);
+    get_2_digit_string(minute, remaining_minutes % 60);
 
     char* start_string = malloc(6);
-    sprintf(start_string, "%02d:%02d", hour, minute);
+    sprintf(start_string, "%s:%s", hour, minute);
     return start_string;
 }
 
 // Good implementation
 char* get_end_string(const Request* req) {
     const int remaining_minutes = (req->start + req->duration) % (24 * 60);
-    const int hour = remaining_minutes / 60;
-    const int minute = remaining_minutes % 60;
+
+    char hour[3], minute[3];
+    get_2_digit_string(hour, remaining_minutes / 60);
+    get_2_digit_string(minute, remaining_minutes % 60);
 
     char* start_string = malloc(6);
-    sprintf(start_string, "%02d:%02d", hour, minute);
+    sprintf(start_string, "%s:%s", hour, minute);
     return start_string;
 }
 
@@ -158,7 +168,7 @@ print_algorithm_report(const char* algo_name, Statistics* stat, const int invali
     double rate_inflation_service_valet_parking = 0.0;
 
     Vector *accepted = &stat->accepted;
-    size_t size = accepted->size;
+    int size = accepted->size;
     for (int i = 0; i < size; i++) {
         Request* req = &accepted->data[i];
         int duration = req->duration;
@@ -304,7 +314,7 @@ print_bookings_single_algo(
         printf("*** Parking Booking - ACCEPTED / %s ***\n\n", algo_name);
 
         for (int i = 0; i < MEMBERS_CNT; i++) {
-            const char member_name = 'A' + i;
+            const char member_name = (char)('A' + i);
             printf("Member_%c has the following bookings:\n", member_name);
 
             int records_cnt = 0;
@@ -323,7 +333,7 @@ print_bookings_single_algo(
         printf("\n*** Parking Booking - REJECTED / %s ***\n\n", algo_name);
 
         for (int i = 0; i < MEMBERS_CNT; i++) {
-            const char member_name = 'A' + i;
+            const char member_name = (char)('A' + i);
 
             int records_cnt = 0;
             process_member(member_name, &stat->rejected, &records_cnt, false);

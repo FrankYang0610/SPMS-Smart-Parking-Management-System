@@ -45,6 +45,7 @@ int main() {
                 if (is_termination) {
                     req.type = TERMINATE;
                 }
+                __attribute__((fallthrough));
             }
             case TERMINATE:
                 printf("Bye!");

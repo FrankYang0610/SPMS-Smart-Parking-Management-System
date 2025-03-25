@@ -5,6 +5,7 @@
 
 #include <assert.h>
 #include <unistd.h>
+#include <stdbool.h>
 #include <sys/wait.h>
 
 #include "scheduler.h"
@@ -41,6 +42,7 @@ bool process_batch(Vector* queues[], Request* req, Statistics* stats[], Tracker*
                 if (is_termination) {
                     rq.type = TERMINATE;
                 }
+                __attribute__((fallthrough));
             }
             case TERMINATE:
                 fclose(fp);

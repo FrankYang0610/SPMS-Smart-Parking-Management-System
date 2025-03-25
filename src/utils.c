@@ -5,6 +5,8 @@
 
 #include "utils.h"
 
+#include <assert.h>
+
 /* GENERIC STRING MANIPULATION */
 
 // using isspace() to cover all delimiters (' ', \f, \t, \n, \r, \v, etc.)
@@ -22,7 +24,8 @@ void strip_no_semicolon(char* str) {
     }
     if (*end == ';') end--;
 
-    size_t len = end - start + 1;
+    assert(end >= start);
+    size_t len = (unsigned)(end - start + 1);
     memmove(start, start, len);
     str[len] = '\0';
 }
