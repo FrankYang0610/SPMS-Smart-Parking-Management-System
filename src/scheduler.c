@@ -51,6 +51,7 @@ bool process_batch(Vector* queues[], Request* req, Statistics* stats[], Tracker*
             case PRINT:
                 if (fork() == 0) {
                     printf("A fork() has been called. Here is the child process printing all bookings. pid = %d.\n\n", getpid());
+                    run_all(queues, stats, trackers);
                     print_bookings(req->algo, stats, *invalid_cnt);
                 } else {
                     wait(NULL);
@@ -72,6 +73,7 @@ void run_all(Vector* queues[], Statistics* stats[], Tracker* trackers[]) {
     run_fcfs(queues[0], stats[0], trackers[0]);
     run_prio(queues[1], stats[1], trackers[1]);
     run_opti(queues[2], stats[2], trackers[2]);
+    printf("\n");
 }
 
 void run_fcfs(Vector* queue, Statistics* stats, Tracker* tracker) {
@@ -167,7 +169,7 @@ static bool try_put(int idx, int start, int end, bool parking, char essential, T
 static bool try_essentials(SegTree *st, int start, int end, int idx) {
     int query_res[3];
     segtree_range_query(st, start, end, query_res);
-    printf("%d%d%d ", query_res[0], query_res[1], query_res[2]);
+
     for (int i = 0; i < 3; i++) {
         if (query_res[i]) {
             segtree_range_set(st, (unsigned)i, start, end, idx);
