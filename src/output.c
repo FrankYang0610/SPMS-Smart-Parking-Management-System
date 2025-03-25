@@ -327,12 +327,11 @@ print_algorithm_report(const char* algo_name, Statistics* stat, const int invali
 
 /**
  * This function prints the summary report.
- * @param queues
  * @param stats
- * @param trackers
+ * @param invalid_cnt
  */
 void
-print_summary_report(Vector* queues[], Statistics* stats[], Tracker* trackers[], const int invalid_cnt) {
+print_summary_report(Statistics* stats[], const int invalid_cnt) {
     printf("*** Parking Booking Manager - Summary Report ***\n\n");
     printf("Performance:\n\n");
 
@@ -349,7 +348,7 @@ print_summary_report(Vector* queues[], Statistics* stats[], Tracker* trackers[],
 
 
 void
-print_bookings(char *algo, Vector* queues[], Statistics* stats[], Tracker* trackers[], const int invalid_cnt) {
+print_bookings(char *algo, Statistics *stats[], const int invalid_cnt) {
 
     bool is_fcfs = strcmp(algo, "fcfs") == 0 || strcmp(algo, "all") == 0 || strcmp(algo, "ALL") == 0;
     bool is_prio = strcmp(algo, "prio") == 0 || strcmp(algo, "all") == 0 || strcmp(algo, "ALL") == 0;
@@ -373,11 +372,7 @@ print_bookings(char *algo, Vector* queues[], Statistics* stats[], Tracker* track
     }
 
     if (is_all) {
-        print_summary_report(queues, stats, trackers, invalid_cnt);
+        print_summary_report(stats, invalid_cnt);
     }
 
-    // To suppress warnings
-    (void)queues;
-    (void)trackers;
-    (void)invalid_cnt;
 }

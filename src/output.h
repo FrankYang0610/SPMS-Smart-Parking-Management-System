@@ -9,6 +9,6 @@
 #include "vector.h"
 #include "state.h"
 
-void print_bookings(char* algo, Vector* queues[], Statistics* stats[], Tracker* trackers[], const int invalid_cnt);
+void print_bookings(char* algo, Statistics* stats[], const int invalid_cnt);
 
 #endif //OUTPUT_H

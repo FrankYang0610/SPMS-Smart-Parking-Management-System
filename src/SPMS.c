@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-// TODO: use `fork()`, `exec()`, `pipe()` or `mkfifo()`?
+// TODO: update some function logic with `fork()` and `pipe()`.
 
 int main() {
     int invalid_cnt = 0;
@@ -50,7 +50,7 @@ int main() {
                 printf("Bye!");
                 return EXIT_SUCCESS;
             case PRINT:
-                print_bookings(req.algo, queues, stats, trackers, invalid_cnt);
+                print_bookings(req.algo, stats, invalid_cnt);
                 break;
             case REQUEST:
                 process_request(queues, &req);
