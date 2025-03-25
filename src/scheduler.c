@@ -49,7 +49,7 @@ bool process_batch(Vector* queues[], Request* req, Statistics* stats[], Tracker*
                 process_request(queues, &rq);
                 break;
             case PRINT:
-                print_bookings(req->algo, queues, stats, trackers, *invalid_cnt);
+                print_bookings(req->algo, stats, *invalid_cnt);
                 break;
             case INVALID:
                 (*invalid_cnt)++;
@@ -77,8 +77,10 @@ void run_fcfs(Vector* queue, Statistics* stats, Tracker* tracker) {
         int end = start + req.duration;
         if (try_put(i, start, end, req.parking, req.essential, tracker)) { 
             stats->accepted.data[stats->accepted.size++] = req;
+            printf("The FCFS scheduler has [accepted] the request.\n");
         } else {
             stats->rejected.data[stats->rejected.size++] = req;
+            printf("The PRIO scheduler has [rejected] the request.\n");
         }
     }
     queue->next = (int)(queue->size);
@@ -96,8 +98,10 @@ void run_prio(Vector* queue, Statistics* stats, Tracker* tracker) {
         int end = start + req.duration;
         if (try_put(i, start, end, req.parking, req.essential, tracker)) { 
             stats->accepted.data[stats->accepted.size++] = req;
+            printf("The PRIO scheduler has [accepted] the request.\n");
         } else {
             stats->rejected.data[stats->rejected.size++] = req;
+            printf("The PRIO scheduler has [rejected] the request.\n");
         }
     }
     queue->next = queue->size;
@@ -109,7 +113,7 @@ void run_opti(Vector* queue, Statistics* stats, Tracker* tracker) {
     (void)queue;
     (void)stats;
     (void)tracker;
-    printf("The OPTI scheduler is updated.\n");
+    printf("The OPTI scheduler is currently unavailable.\n");
 }
 
 
@@ -117,13 +121,15 @@ void run_opti(Vector* queue, Statistics* stats, Tracker* tracker) {
 // This function will process both parking request and essential request(s).
 static bool try_put(int idx, int start, int end, bool parking, char essential, Tracker* tracker) {
 
+    idx += 1; // TODO: requires further discussion.
+
     /* Try Parking */
 
     if (parking) { // needs parking
         int query_res[10];
         segtree_range_query(tracker->park, start, end, query_res);
         for (int i = 0; i < 10; i++) {
-            if (query_res[i] != 0) {
+            if (query_res[i]) {
                 // the segment tree is set to the index of the queue. 
                 // This allows us to know which request is occupying the parking slot during printBooking.
                 segtree_range_set(tracker->park, (unsigned)i, start, end, idx);
@@ -156,8 +162,9 @@ static bool try_put(int idx, int start, int end, bool parking, char essential, T
 static bool try_essentials(SegTree *st, int start, int end, int idx) {
     int query_res[3];
     segtree_range_query(st, start, end, query_res);
+    printf("%d%d%d ", query_res[0], query_res[1], query_res[2]);
     for (int i = 0; i < 3; i++) {
-        if (query_res[i] != 0) {
+        if (query_res[i]) {
             segtree_range_set(st, (unsigned)i, start, end, idx);
             break;
         }

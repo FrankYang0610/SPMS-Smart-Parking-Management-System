@@ -116,10 +116,10 @@ void parse_input(const char tokens[8][100], Request* req) {
         const char* bbb = tokens[5];
         const char* ccc = tokens[6];
 
-        int essentials_cnt = (bool)(strlen(bbb)) + (bool)(strlen(ccc)); // how many essnetials parameter
-        printf("DEBUG: addParking pre\n");
+        int essentials_cnt = (bool)(strlen(bbb)) + (bool)(strlen(ccc)); // how many essentials parameter
+        printf("DEBUG: addParking pre, essentials_cnt = %d\n", essentials_cnt);
 
-        if (get_valid_pair(bbb) == NULL) {
+        if (essentials_cnt && get_valid_pair(bbb) == NULL) {
             req->type = INVALID;
             printf("Invalid Essential Item: %s\n", bbb);
             return;
