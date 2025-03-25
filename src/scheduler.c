@@ -90,7 +90,7 @@ void run_fcfs(Vector* queue, Statistics* stats, Tracker* tracker) {
             printf("The FCFS scheduler has [accepted] the request.\n");
         } else {
             stats->rejected.data[stats->rejected.size++] = req;
-            printf("The PRIO scheduler has [rejected] the request.\n");
+            printf("The FCFS scheduler has [rejected] the request.\n");
         }
     }
     queue->next = (int)(queue->size);
