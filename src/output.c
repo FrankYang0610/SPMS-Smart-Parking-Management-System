@@ -296,13 +296,29 @@ process_member(const char member_name, const Vector* stat_vector, int* records_c
 
 
 /**
- * This function prints the booking information for a specific scheduling algorithm.
+ * This function runs a scheduler and prints the booking information under that scheduling algorithm.
  */
 void
-print_bookings_single_algo(
+schedule_and_print_bookings_single_algo(
     int pipe_ptoc[2], int pipe_ctop[2],
-    char* algo_name, Statistics* stat, const int invalid_cnt
+    char* algo_name, Vector* queue, Statistics* stat, Tracker* tracker, const int invalid_cnt
 ) {
+
+    // Run the Scheduler
+
+    if (strcmp(algo_name, "FCFS") == 0) {
+        run_fcfs(queue, stat, tracker);
+    } else if (strcmp(algo_name, "PRIO") == 0) {
+        run_prio(queue, stat, tracker);
+    } else if (strcmp(algo_name, "OPTI") == 0) {
+        // run_opti(queue, stat, tracker);
+    }
+
+    printf("\n");
+
+
+    // Print the bookings
+
 
     PipeMessageType buffer;
 
@@ -383,29 +399,11 @@ schedule_and_print_bookings(
     }
 
 
-    // Run schedulers
-
-    if (is_fcfs) {
-        run_fcfs(queues[0], stats[0], trackers[0]);
-    }
-
-    if (is_prio) {
-        run_prio(queues[1], stats[1], trackers[1]);
-    }
-
-    if (is_opti) {
-        // TODO: Implement the OPTI scheduler.
-        // run_opti(queues[2], stats[2], trackers[2]);
-    }
-
-    printf("\n");
-
-
-    // Build pipes and print bookings.
+    // Build pipes.
 
     int pipe_ptoc[3][2], pipe_ctop[3][2];
 
-    // Run the FCFS scheduler and print the result.
+    // FCFS
     if (is_fcfs) {
         pipe(pipe_ptoc[0]);     // FCFS scheduler, parent to child
         pipe(pipe_ctop[0]);     // FCFS scheduler, child to parent
@@ -415,8 +413,9 @@ schedule_and_print_bookings(
             close(pipe_ptoc[0][1]); // No need to write to ptoc.
             close(pipe_ctop[0][0]); // No need to read from ctop.
 
-            print_bookings_single_algo(
-                pipe_ptoc[0], pipe_ctop[0], "FCFS", stats[0], invalid_cnt
+            schedule_and_print_bookings_single_algo(
+                pipe_ptoc[0], pipe_ctop[0],
+                "FCFS", queues[0], stats[0], trackers[0], invalid_cnt
             );
 
             close(pipe_ptoc[0][0]);
@@ -430,7 +429,7 @@ schedule_and_print_bookings(
         close(pipe_ctop[0][1]);
     }
 
-    // Run the PRIO scheduler and print the result.
+    // PRIO
     if (is_prio) {
         pipe(pipe_ptoc[1]);     // PRIO scheduler, parent to child
         pipe(pipe_ctop[1]);     // PRIO scheduler, child to parent
@@ -440,8 +439,9 @@ schedule_and_print_bookings(
             close(pipe_ptoc[1][1]); // No need to write to ptoc.
             close(pipe_ctop[1][0]); // No need to read from ctop.
 
-            print_bookings_single_algo(
-                pipe_ptoc[1], pipe_ctop[1], "PRIO", stats[1], invalid_cnt
+            schedule_and_print_bookings_single_algo(
+                pipe_ptoc[1], pipe_ctop[1],
+                "PRIO", queues[1], stats[1], trackers[1], invalid_cnt
             );
 
             close(pipe_ptoc[1][0]);
@@ -455,7 +455,7 @@ schedule_and_print_bookings(
         close(pipe_ctop[1][1]);
     }
 
-    // Run the OPTI scheduler and print the result.
+    // OPTI
     if (is_opti) {
         pipe(pipe_ptoc[2]);     // OPTI scheduler, parent to child
         pipe(pipe_ctop[2]);     // OPTI scheduler, child to parent
@@ -465,8 +465,9 @@ schedule_and_print_bookings(
             close(pipe_ptoc[2][1]); // No need to write to ptoc.
             close(pipe_ctop[2][0]); // No need to read from ctop.
 
-            print_bookings_single_algo(
-                pipe_ptoc[2], pipe_ctop[2], "OPTI", stats[2], invalid_cnt
+            schedule_and_print_bookings_single_algo(
+                pipe_ptoc[2], pipe_ctop[2],
+                "OPTI", queues[2], stats[2], trackers[2], invalid_cnt
             );
 
             close(pipe_ptoc[2][0]);
