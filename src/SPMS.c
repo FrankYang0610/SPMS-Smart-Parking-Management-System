@@ -18,8 +18,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 
-// TODO: update the scheduling logic using `fork()` and `pipe()`.
-// TODO: update the `printBookings`-related logic. Run FCFS and PRIO when a `printBookings` is called.
+// TODO: use `pipe()` syscall in the program.
 
 int main() {
     int invalid_cnt = 0;
@@ -53,7 +52,9 @@ int main() {
                 return EXIT_SUCCESS;
             case PRINT:
                 if (fork() == 0) {
-                    printf("A fork() has been called. Here is the child process printing all bookings. pid = %d.\n\n", getpid());
+                    printf("A fork() has been called.\n");
+                    printf("Here is the child process to run the schedulers and print the bookings. pid = %d.\n\n", getpid());
+                    run_all(queues, stats, trackers);
                     print_bookings(req.algo, stats, invalid_cnt);
                 } else {
                     wait(NULL);
@@ -61,12 +62,7 @@ int main() {
                 break;
             case REQUEST:
                 process_request(queues, &req);
-                // Online scheduling algorithms
-                run_fcfs(queues[0], stats[0], trackers[0]);
-                run_prio(queues[1], stats[1], trackers[1]);
-                // Offline scheduling algorithms
-                // TODO: further discussion on the optimal scheduler.
-                // run_opti(queues[2], stats[2], trackers[2]);
+                // Scheduling algorithms will be called in case PRINT. [Revision Mar 25]
                 break;
             case INVALID:
                 printf("The request is invalid. Please check and try again!\n");
