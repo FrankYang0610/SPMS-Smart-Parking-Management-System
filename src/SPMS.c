@@ -50,8 +50,12 @@ int main() {
             case TERMINATE:
                 printf("Bye!");
                 return EXIT_SUCCESS;
-            case PRINT:
-                if (fork() == 0) {
+            case PRINT: {
+                const pid_t pid = fork();
+                if (pid < 0) {
+                    perror("fork");
+                    exit(EXIT_FAILURE);
+                } else if (pid == 0) {
                     printf("A fork() has been called.\n");
                     printf("Here is the child process to run the schedulers and print all bookings. pid = %d.\n\n", getpid());
                     schedule_and_print_bookings(req.algo, queues, stats, trackers, invalid_cnt);
@@ -60,6 +64,7 @@ int main() {
                     wait(NULL);
                 }
                 break;
+            }
             case REQUEST:
                 process_request(queues, &req);
                 // Scheduling algorithms will be called in case PRINT. [Revision Mar 25]

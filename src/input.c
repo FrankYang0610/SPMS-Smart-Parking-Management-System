@@ -31,7 +31,7 @@ Request preprocess_input(char* input) {
     char **result = split(input);
     printf("DEBUG: split success. TOKENS: \n");
     for (int i = 0; i < 8 && result[i]; i++) {
-        printf("\tToken %d: \"%s\"\n", i,result[i]);
+        printf("\tToken %d: \"%s\"\n", i, result[i]);
     }
 
     char tokens[8][100];
@@ -69,7 +69,7 @@ void parse_input(const char tokens[8][100], Request* req) {
     if (compare("printBookings", type)) {
         // printBookings –xxx –[fcfs/prio/opti/ALL]
         req->type = PRINT;
-        req->algo = malloc(sizeof(char) * 4);
+        req->algo = malloc(sizeof(char) * 5);
         strcpy(req->algo, tokens[1] + 1); // + 1 to skip the '-'
         return;
     }
