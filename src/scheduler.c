@@ -50,9 +50,10 @@ bool process_batch(Vector* queues[], Request* req, Statistics* stats[], Tracker*
                 break;
             case PRINT:
                 if (fork() == 0) {
-                    printf("A fork() has been called. Here is the child process printing all bookings. pid = %d.\n\n", getpid());
-                    run_all(queues, stats, trackers);
-                    print_bookings(req->algo, stats, *invalid_cnt);
+                    printf("A fork() has been called.\n");
+                    printf("Here is the child process to run the schedulers and print all bookings. pid = %d.\n\n", getpid());
+                    schedule_and_print_bookings(req->algo, queues, stats, trackers, *invalid_cnt);
+                    exit(0);
                 } else {
                     wait(NULL);
                 }

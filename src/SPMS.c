@@ -18,7 +18,6 @@
 #include <stdbool.h>
 #include <unistd.h>
 
-// TODO: use `pipe()` syscall in the program.
 
 int main() {
     int invalid_cnt = 0;
@@ -53,9 +52,9 @@ int main() {
             case PRINT:
                 if (fork() == 0) {
                     printf("A fork() has been called.\n");
-                    printf("Here is the child process to run the schedulers and print the bookings. pid = %d.\n\n", getpid());
-                    run_all(queues, stats, trackers);
-                    print_bookings(req.algo, stats, invalid_cnt);
+                    printf("Here is the child process to run the schedulers and print all bookings. pid = %d.\n\n", getpid());
+                    schedule_and_print_bookings(req.algo, queues, stats, trackers, invalid_cnt);
+                    exit(0);
                 } else {
                     wait(NULL);
                 }
