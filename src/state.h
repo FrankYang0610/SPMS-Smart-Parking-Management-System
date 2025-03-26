@@ -19,14 +19,16 @@ typedef struct Statistics {
 // Each scheduling algorithm should have exactly one Tracker instance.
 // This struct shall be modified in try_put() and try_essential().
 typedef struct Tracker {
-    SegTree* lu;    // locker + umbrella
-    SegTree* bc;    // battery + cable
-    SegTree* vi;    // valet parking + inflation services
+    SegTree* bc;    // battery + cable (0)
+    SegTree* lu;    // locker + umbrella (1)
+    SegTree* vi;    // valet parking + inflation services (2)
     SegTree* park;  // parking slots
 } Tracker;
 
 
 void init_tracker(Tracker* tr);
 void init_statistics(Statistics* stats);
+void reset_statistics(Statistics* stats);
+void reset_tracker(Tracker* tr);
 
 #endif //STATE_H

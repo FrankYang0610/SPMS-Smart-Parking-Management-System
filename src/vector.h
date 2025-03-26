@@ -10,7 +10,6 @@ typedef struct Vector {
     Request *data;
     int size;
     int capacity;
-    int next;
 } Vector;
 
 void vector_init(Vector *vec);
@@ -25,9 +24,11 @@ void vector_free(Vector *vec);
  * @param cmp The comparison function
  */
 void vector_qsort(Vector *vec, int l, int r, int (*cmp)(const void*, const void*));
+Vector* vector_copy(Vector* vec);
 
-int cmp_request(const void *a, const void *b);
+int cmp_start(const void *a, const void *b);
 int cmp_priority(const void *a, const void *b);
 int cmp_duration(const void *a, const void *b);
+
 
 #endif

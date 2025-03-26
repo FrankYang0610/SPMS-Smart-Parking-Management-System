@@ -47,6 +47,7 @@ typedef struct Request {
     int start; 
     int duration;
     int priority; 
+    int order; // start from 1
     bool parking; // need parking or not
 
     // 3 bit binary, battery + cable, locker + umbrella, InflationService + valetPark respectively

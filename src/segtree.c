@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <assert.h>
+#include <limits.h>  // Added for INT_MIN
 
 struct SegTree {
     int start;
@@ -20,29 +21,30 @@ static void maintain(SegTree* st, unsigned k, int cl, int cr, int p) {
     if (cl == cr) return;
 
     if (st->ifLazy[k][p]) {
-        int cm = cl + (cr - cl) / 2;
         int left = p * 2;
         int right = p * 2 + 1;
 
         st->lazy[k][left] = st->lazy[k][p];
         st->ifLazy[k][left] = true;
-        st->tree[k][left] = st->lazy[k][p] * (cm - cl + 1);
+        st->tree[k][left] = st->lazy[k][p];  // Changed for max
 
         st->lazy[k][right] = st->lazy[k][p];
         st->ifLazy[k][right] = true;
-        st->tree[k][right] = st->lazy[k][p] * (cr - cm);
+        st->tree[k][right] = st->lazy[k][p];  // Changed for max
 
         st->lazy[k][p] = 0;
         st->ifLazy[k][p] = false;
     }
 }
 
-static int range_sum(SegTree* st, unsigned k, int l, int r, int cl, int cr, int p) {
-    if (l > cr || r < cl) return 0;
+static int range_max(SegTree* st, unsigned k, int l, int r, int cl, int cr, int p) {
+    if (l > cr || r < cl) return INT_MIN;  // Changed to return min for max query
     if (l <= cl && cr <= r) return st->tree[k][p];
     maintain(st, k, cl, cr, p);
     int cm = cl + (cr - cl) / 2;
-    return range_sum(st, k, l, r, cl, cm, p * 2) + range_sum(st, k, l, r, cm + 1, cr, p * 2 + 1);
+    int left_max = range_max(st, k, l, r, cl, cm, p * 2);
+    int right_max = range_max(st, k, l, r, cm + 1, cr, p * 2 + 1);
+    return (left_max > right_max) ? left_max : right_max;  // Compute max of children
 }
 
 static void range_set(SegTree* st, unsigned k, int l, int r, int val, int cl, int cr, int p) {
@@ -50,16 +52,16 @@ static void range_set(SegTree* st, unsigned k, int l, int r, int val, int cl, in
     if (l <= cl && cr <= r) {
         st->lazy[k][p] = val;
         st->ifLazy[k][p] = true;
-        st->tree[k][p] = val * (cr - cl + 1);
+        st->tree[k][p] = val;  // Set to val (not multiplied by size)
         return;
     }
     maintain(st, k, cl, cr, p);
     int cm = cl + (cr - cl) / 2;
     range_set(st, k, l, r, val, cl, cm, p * 2);
     range_set(st, k, l, r, val, cm + 1, cr, p * 2 + 1);
-    st->tree[k][p] = st->tree[k][p * 2] + st->tree[k][p * 2 + 1];
+    // Update current node's value to max of children
+    st->tree[k][p] = (st->tree[k][p * 2] > st->tree[k][p * 2 + 1]) ? st->tree[k][p * 2] : st->tree[k][p * 2 + 1];
 }
-
 
 /* PUBLIC METHODS */
 
@@ -112,6 +114,6 @@ void segtree_range_set(SegTree* st, unsigned k, int l, int r, int val) {
 
 void segtree_range_query(SegTree* st, int l, int r, int* results) {
     for (unsigned k = 0; k < st->K; k++) {
-        results[k] = (range_sum(st, k, l, r, st->start, st->end, 1) == 0);
+        results[k] = range_max(st, k, l, r, st->start, st->end, 1);  // Directly store max value
     }
 }

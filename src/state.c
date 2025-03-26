@@ -14,3 +14,17 @@ void init_statistics(Statistics* stats) {
     vector_init(&stats->accepted);
     vector_init(&stats->rejected);
 }
+
+void reset_statistics(Statistics* stats) {
+    vector_free(&stats->accepted);
+    vector_free(&stats->rejected);
+    init_statistics(stats);
+}
+
+void reset_tracker(Tracker* tr) {
+    segtree_destroy(tr->lu);
+    segtree_destroy(tr->bc);
+    segtree_destroy(tr->vi);
+    segtree_destroy(tr->park);
+    init_tracker(tr);
+}

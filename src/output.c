@@ -301,17 +301,23 @@ process_member(const char member_name, const Vector* stat_vector, int* records_c
 void
 schedule_and_print_bookings_single_algo(
     int pipe_ptoc[2], int pipe_ctop[2],
-    char* algo_name, Vector* queue, Statistics* stat, Tracker* tracker, const int invalid_cnt
+    char* algo_name, Vector* queue, const int invalid_cnt
 ) {
 
     // Run the Scheduler
+
+    Tracker* tracker = malloc(sizeof(Tracker));
+    Statistics* stat = malloc(sizeof(Statistics));
+
+    init_tracker(tracker);
+    init_statistics(stat);
 
     if (strcmp(algo_name, "FCFS") == 0) {
         run_fcfs(queue, stat, tracker);
     } else if (strcmp(algo_name, "PRIO") == 0) {
         run_prio(queue, stat, tracker);
     } else if (strcmp(algo_name, "OPTI") == 0) {
-        // run_opti(queue, stat, tracker);
+        run_opti(queue, stat, tracker);
     }
 
     printf("\n");
@@ -383,10 +389,7 @@ schedule_and_print_bookings_single_algo(
 
 }
 
-void
-schedule_and_print_bookings(
-    char *algo, Vector* queues[], Statistics *stats[], Tracker* trackers[], const int invalid_cnt
-) {
+void schedule_and_print_bookings (char *algo, Vector* queue, const int invalid_cnt) {
 
     bool is_fcfs = strcmp(algo, "fcfs") == 0 || strcmp(algo, "all") == 0 || strcmp(algo, "ALL") == 0;
     bool is_prio = strcmp(algo, "prio") == 0 || strcmp(algo, "all") == 0 || strcmp(algo, "ALL") == 0;
@@ -415,7 +418,7 @@ schedule_and_print_bookings(
 
             schedule_and_print_bookings_single_algo(
                 pipe_ptoc[0], pipe_ctop[0],
-                "FCFS", queues[0], stats[0], trackers[0], invalid_cnt
+                "FCFS", queue, invalid_cnt
             );
 
             close(pipe_ptoc[0][0]);
@@ -441,7 +444,7 @@ schedule_and_print_bookings(
 
             schedule_and_print_bookings_single_algo(
                 pipe_ptoc[1], pipe_ctop[1],
-                "PRIO", queues[1], stats[1], trackers[1], invalid_cnt
+                "PRIO", queue, invalid_cnt
             );
 
             close(pipe_ptoc[1][0]);
@@ -467,7 +470,7 @@ schedule_and_print_bookings(
 
             schedule_and_print_bookings_single_algo(
                 pipe_ptoc[2], pipe_ctop[2],
-                "OPTI", queues[2], stats[2], trackers[2], invalid_cnt
+                "OPTI", queue, invalid_cnt
             );
 
             close(pipe_ptoc[2][0]);

@@ -37,8 +37,8 @@ void segtree_destroy(SegTree* st);
 void segtree_range_set(SegTree* st, unsigned k, int l, int r, int val);
 
 /**
- * Queries all K instances for zero-sum check in [l, r]
- *                  Stores 1 at [k] if sum==0 in k-th tree, else 0
+ * Queries all K instances for the maximum value in [l, r]
+ *                  Stores the maximum value in the range for each k-th tree.
  * 
  * @param st        Handle from segtree_build()
  * @param l         Left query boundary (inclusive)

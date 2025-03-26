@@ -21,18 +21,9 @@
 
 int main() {
     int invalid_cnt = 0;
-    Statistics* stats[3];   // fcfs, prio, opti
-    Vector* queues[3];      // fcfs, prio, opti
-    Tracker* trackers[3];   // fcfs, prio, opti
 
-    for (int i = 0; i < 3; i++) {
-        stats[i] = malloc(sizeof(Statistics));
-        queues[i] = malloc(sizeof(Vector));
-        trackers[i] = malloc(sizeof(Tracker));
-        init_statistics(stats[i]);
-        vector_init(queues[i]);
-        init_tracker(trackers[i]);
-    }
+    Vector* queue = malloc(sizeof(Vector)); 
+    vector_init(queue);
 
     printf("~~ WELCOME TO PolyU ~~\n");
 
@@ -41,7 +32,7 @@ int main() {
         
         switch (req.type) {
             case BATCH: {
-                bool is_termination = process_batch(queues, &req, stats, trackers, &invalid_cnt);
+                bool is_termination = process_batch(queue, &req, &invalid_cnt);
                 if (is_termination) {
                     req.type = TERMINATE;
                 }
@@ -56,9 +47,10 @@ int main() {
                     perror("fork");
                     exit(EXIT_FAILURE);
                 } else if (pid == 0) {
-                    printf("A fork() has been called.\n");
-                    printf("Here is the child process to run the schedulers and print all bookings. pid = %d.\n\n", getpid());
-                    schedule_and_print_bookings(req.algo, queues, stats, trackers, invalid_cnt);
+                    printf("DEBUG: A fork() has been called.\n");
+                    printf("DEBUG: Here is the child process to run the schedulers and print all bookings. pid = %d.\n\n", getpid());
+
+                    schedule_and_print_bookings(req.algo, queue, invalid_cnt);
                     exit(0);
                 } else {
                     wait(NULL);
@@ -66,7 +58,7 @@ int main() {
                 break;
             }
             case REQUEST:
-                process_request(queues, &req);
+                process_request(queue, &req);
                 // Scheduling algorithms will be called in case PRINT. [Revision Mar 25]
                 break;
             case INVALID:

@@ -8,7 +8,6 @@ void vector_init(Vector *vec) {
     vec->data = malloc(INIT_CAPACITY * sizeof(Request));
     vec->capacity = INIT_CAPACITY;
     vec->size = 0;
-    vec->next = 0;
 }
 
 void vector_add(Vector *vec, Request req) {
@@ -28,7 +27,7 @@ void vector_free(Vector *vec) {
     vec->size = vec->capacity = 0;
 }
 
-int cmp_request(const void *a, const void *b) {
+int cmp_start(const void *a, const void *b) {
     const Request *ra = (const Request*)a;
     const Request *rb = (const Request*)b;
     return ra->start - rb->start;
@@ -49,4 +48,15 @@ int cmp_duration(const void *a, const void *b) {
 void vector_qsort(Vector *vec, int l, int r, int (*cmp)(const void*, const void*)) {
     assert (r - l + 1 >= 0);
     qsort(vec->data + l, (size_t)(r - l + 1), sizeof(Request), cmp);
+}
+
+Vector* vector_copy(Vector* vec) {
+    Vector* copy = malloc(sizeof(Vector));
+    copy->data = malloc((unsigned)vec->capacity * sizeof(Request));
+    copy->size = vec->size;
+    copy->capacity = vec->capacity;
+    for (int i = 0; i < vec->size; i++) {
+        copy->data[i] = vec->data[i];
+    }
+    return copy;
 }
