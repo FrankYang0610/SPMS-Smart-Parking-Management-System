@@ -25,7 +25,7 @@ Please create a project folder first. Then move the `src/` folder into the proje
 
 Using the following command to build the project with `gcc`: **(Still under discussion...)**
 ```
-gcc -I./src src/SPMS.c src/input.c src/analyzer.c src/output.c src/scheduler.c src/utils.c src/vector.c src/segtree.c src/state.c -o SPMS -Wall -Wextra -Wshadow -Wconversion  -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -O2
+gcc -I./src src/SPMS.c src/input.c src/output.c src/scheduler.c src/utils.c src/vector.c src/segtree.c src/state.c -o SPMS -Wall -Wextra -Wshadow -Wconversion  -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -O2
 ```
 
 #### Build with CMake
