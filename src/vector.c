@@ -64,9 +64,9 @@ int cmp_volume_cnt(const void *a, const void *b) {
         if (ra->essential & mask) a_cnt++;
         if (rb->essential & mask) b_cnt++;
     }
-    int tmp = ra->duration * a_cnt - rb->duration * b_cnt;
+    int tmp = rb->duration * b_cnt - ra->duration * a_cnt; 
     if (tmp != 0) return tmp;
-    return a_cnt - b_cnt;
+    return b_cnt - a_cnt;
 }
 
 
