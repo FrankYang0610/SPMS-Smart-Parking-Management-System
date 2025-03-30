@@ -67,7 +67,7 @@ bool process_batch(Vector* queue, Request* req, int* invalid_cnt) {
         }
     }
 
-    return true;
+    return false;
 }
 
 void run_fcfs(Vector* queue, Statistics* stats, Tracker* tracker) {
