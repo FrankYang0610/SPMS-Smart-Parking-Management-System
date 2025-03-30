@@ -49,7 +49,10 @@ for _ in range(1000):
 
 # Write the instructions to a dat file
 with open('batch001.dat', 'w') as file:
-    for instruction in instructions:
-        file.write(instruction + '\n')
+    for i, instruction in enumerate(instructions):
+        if i == len(instructions) - 1:
+            file.write(instruction)
+        else:
+            file.write(instruction + '\n') 
 
 print("1000 instructions have been generated and saved in 'batch001.dat'.")
