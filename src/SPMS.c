@@ -36,7 +36,7 @@ int main() {
         
         switch (req.type) {
             case BATCH: {
-                bool is_termination = process_batch(queues, &req, stats, trackers, &invalid_cnt);
+                bool is_termination = process_batch(queue, &req, &invalid_cnt);
                 if (!is_termination) {
                     break;
                 }

@@ -37,7 +37,7 @@ bool process_batch(Vector* queue, Request* req, int* invalid_cnt) {
 
         switch (rq.type) {
             case BATCH: {
-                bool is_termination = process_batch(queues, &rq, stats, trackers, invalid_cnt);
+                bool is_termination = process_batch(queue, &rq, invalid_cnt);
                 if (!is_termination) {
                     break;
                 }
@@ -126,9 +126,8 @@ void run_opti(Vector* queue, Statistics* stats, Tracker* tracker) {
         }
         opti_iter();
     }
-
+    vector_qsort(rejected, 0, rejected->size - 1, cmp_volume_cnt);
     opti_greedy(rejected, accepted, tracker, false);
-
 
     /* Free Memory */
     vector_overwrite(accepted, &stats->accepted);
