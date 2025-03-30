@@ -37,11 +37,10 @@ int main() {
         switch (req.type) {
             case BATCH: {
                 bool is_end = process_batch(queue, &req, &invalid_cnt);
-                if (is_end) {
-                    printf("Bye!");
-                    return 0;
+                if (!is_end) {
+                    break;
                 }
-                break;
+                __attribute__((fallthrough));
             }
             case TERMINATE:
                 printf("Bye!");
