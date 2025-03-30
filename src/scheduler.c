@@ -117,6 +117,7 @@ void run_opti(Vector* queue, Statistics* stats, Tracker* tracker) {
         opti_delete(rejected, accepted, tracker);
         opti_greedy(rejected, accepted, tracker, true);
         double tmp_util = opti_util(accepted);
+        printf("DEBUG: OPTI NEW UTIL: %lf\n", tmp_util);
         if (opti_accept(tmp_util, cur_util)) {
             cur_util = tmp_util;
             opti_backup(rejected, accepted);

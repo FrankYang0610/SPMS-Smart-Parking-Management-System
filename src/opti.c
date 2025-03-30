@@ -130,9 +130,13 @@ double opti_util(Vector* accepted) {
     int util = 0;
     for (int i = 0; i < accepted->size; i++) {
         Request* req = &accepted->data[i];
-        util += (req->duration) * (req->essential + req->parking);
+        int ess_cnt = ((req->essential & 0b100) ? 1 : 0) +
+                      ((req->essential & 0b010) ? 1 : 0) +
+                      ((req->essential & 0b001) ? 1 : 0);
+        int park_cnt = req->parking ? 1 : 0;
+        util += (req->duration) * (ess_cnt + park_cnt);
     }
-    return (double)util / (double)((T_max - T_min + 1) * 4);
+    return (double)util / (double)((T_max - T_min + 1) * 19);
 }
 
 bool opti_accept(double new_util, double old_util) {
