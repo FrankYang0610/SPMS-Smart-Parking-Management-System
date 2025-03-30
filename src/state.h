@@ -29,5 +29,6 @@ void init_tracker(Tracker* tr);
 void init_statistics(Statistics* stats);
 void reset_statistics(Statistics* stats);
 void reset_tracker(Tracker* tr);
+void tracker_overwrite(Tracker* source, Tracker* target);
 
 #endif //STATE_H

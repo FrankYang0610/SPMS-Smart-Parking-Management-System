@@ -61,11 +61,7 @@ Request fetch_input();
 Request file_input(FILE* file);
 Request preprocess_input(char*);
 
-// ========== The Parser ========== //
 void parse_input(const char tokens[8][100], Request* req);
 
-// ========== The Console ========== //
-// void console_init();
-// void console();
 
 #endif //INPUT_H

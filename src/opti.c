@@ -20,6 +20,7 @@ static const int MAX_STEPS = 2000;
 
 static Vector* pre_accepted = NULL;
 static Vector* pre_rejected = NULL;
+static Tracker* pre_tracker = NULL;
 
 // the following needs reset everytime
 double decay, cur_t;
@@ -47,8 +48,10 @@ void opti_reset() {
     } else {
         pre_accepted = malloc(sizeof(Vector));
         pre_rejected = malloc(sizeof(Vector));
+        pre_tracker = malloc(sizeof(Tracker));
         vector_init(pre_accepted);
         vector_init(pre_rejected);
+        init_tracker(pre_tracker);
     }
 
     double ref = -0.1;  // reference new_e - e
@@ -71,22 +74,13 @@ void opti_reset() {
 }
 
 void opti_rollback(Vector* rejected, Vector* accepted, Tracker* tracker) {
-    segtree_empty(tracker->park);
-    segtree_empty(tracker->bc);
-    segtree_empty(tracker->lu);
-    segtree_empty(tracker->vi);
-
-    for (int i = 0; i < pre_accepted->size; i++) {
-        Request* req = &pre_accepted->data[i];
-        int end = req->start + req->duration - 1;
-        try_put(req->order, req->start, end, req->parking, req->essential, tracker);
-    }
-
+    tracker_overwrite(pre_tracker, tracker);
     vector_overwrite(pre_accepted, accepted);
     vector_overwrite(pre_rejected, rejected);
 }
 
-void opti_backup(Vector* rejected, Vector* accpeted) {
+void opti_backup(Vector* rejected, Vector* accpeted, Tracker* tracker) {
+    tracker_overwrite(tracker, pre_tracker);
     vector_overwrite(rejected, pre_rejected);
     vector_overwrite(accpeted, pre_accepted);
 }

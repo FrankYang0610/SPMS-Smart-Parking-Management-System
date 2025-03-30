@@ -1,6 +1,8 @@
 #include "state.h"
 #include "utils.h"
 
+#include <assert.h>
+
 void init_tracker(Tracker* tr) {
     int start = parse_time("2025-05-10", "00:00") - 5;
     int end = parse_time("2025-05-16", "23:59") + 5;
@@ -27,4 +29,12 @@ void reset_tracker(Tracker* tr) {
     segtree_destroy(tr->vi);
     segtree_destroy(tr->park);
     init_tracker(tr);
+}
+
+void tracker_overwrite(Tracker* source, Tracker* target) {
+    assert(source && target);
+    segtree_overwrite(source->lu, target->lu);
+    segtree_overwrite(source->bc, target->bc);
+    segtree_overwrite(source->vi, target->vi);
+    segtree_overwrite(source->park, target->park);
 }

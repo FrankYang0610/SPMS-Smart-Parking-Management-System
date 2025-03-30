@@ -53,4 +53,12 @@ void segtree_range_set(SegTree* st, unsigned k, int l, int r, int val);
  */
 void segtree_range_query(SegTree* st, int l, int r, int* results);
 
+/**
+ * Overwrites the contents of target segment tree with source
+ * 
+ * @param source    Source segment tree to copy from
+ * @param target    Target segment tree to copy to
+ */
+void segtree_overwrite(SegTree* source, SegTree* target);
+
 #endif // SEGTREE_H

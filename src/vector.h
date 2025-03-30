@@ -25,7 +25,6 @@ void vector_deepfree(Vector *vec);
  * @param cmp The comparison function
  */
 void vector_qsort(Vector *vec, int l, int r, int (*cmp)(const void*, const void*));
-Vector* vector_copy(Vector* vec);
 void vector_overwrite(Vector* vec, Vector* target);
 
 int cmp_start(const void *a, const void *b);

@@ -232,7 +232,10 @@ void try_delete(int order, int start, int end, bool parking, char essential, Tra
                 segtree_range_set(tracker->park, k, start, end, 0);
                 break;
             }
-            assert(k != 9);
+            if (k == 9) {
+                printf("DEBUG: cant find req %d to delete!\n", order);
+                assert(false);
+            }
         }
     }
 

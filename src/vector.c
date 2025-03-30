@@ -75,17 +75,6 @@ void vector_qsort(Vector *vec, int l, int r, int (*cmp)(const void*, const void*
     qsort(vec->data + l, (size_t)(r - l + 1), sizeof(Request), cmp);
 }
 
-Vector* vector_copy(Vector* vec) {
-    Vector* copy = malloc(sizeof(Vector));
-    copy->data = malloc((unsigned)vec->capacity * sizeof(Request));
-    copy->size = vec->size;
-    copy->capacity = vec->capacity;
-    for (int i = 0; i < vec->size; i++) {
-        copy->data[i] = vec->data[i];
-    }
-    return copy;
-}
-
 void vector_overwrite(Vector* source, Vector* target) {
     vector_free(target);
     target->data = malloc((unsigned)source->capacity * sizeof(Request));

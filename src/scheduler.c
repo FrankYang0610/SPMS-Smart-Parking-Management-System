@@ -37,9 +37,7 @@ bool process_batch(Vector* queue, Request* req, int* invalid_cnt) {
         switch (rq.type) {
             case BATCH: {
                 bool is_end = process_batch(queue, &rq, invalid_cnt);
-                if (!is_end) {
-                    break;
-                }
+                if (!is_end) break;
                 __attribute__((fallthrough));
             }
             case TERMINATE:
@@ -100,9 +98,11 @@ void run_prio(Vector* queue, Statistics* stats, Tracker* tracker) {
 
 // Simulated Annealing (SA) + Improved LJF Greedy Algorihthm.
 void run_opti(Vector* queue, Statistics* stats, Tracker* tracker) {
-    Vector* rejected = vector_copy(queue);
+    Vector* rejected = malloc(sizeof(Vector));
     Vector* accepted = malloc(sizeof(Vector));
     vector_init(accepted);
+    vector_init(rejected);
+    vector_overwrite(queue, rejected);
 
     opti_reset();
     double cur_util = 0.0;
@@ -112,17 +112,19 @@ void run_opti(Vector* queue, Statistics* stats, Tracker* tracker) {
     while (opti_running()) {
         vector_qsort(rejected, 0, rejected->size - 1, cmp_volume_cnt);
         opti_delete(rejected, accepted, tracker);
+        // printf("DEBUG: opti deleted\n");
         opti_greedy(rejected, accepted, tracker, true);
         double tmp_util = opti_util(accepted);
         if (opti_accept(tmp_util, cur_util)) {
             cur_util = tmp_util;
-            opti_backup(rejected, accepted);
+            opti_backup(rejected, accepted, tracker);
         }
         else {
             opti_rollback(rejected, accepted, tracker);
         }
         opti_iter();
     }
+
     vector_qsort(rejected, 0, rejected->size - 1, cmp_volume_cnt);
     opti_greedy(rejected, accepted, tracker, false);
 

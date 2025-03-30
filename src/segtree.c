@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <assert.h>
-#include <limits.h>  // Added for INT_MIN
+#include <limits.h>
+#include <string.h>
 
 struct SegTree {
     int start;
@@ -125,5 +126,40 @@ void segtree_range_set(SegTree* st, unsigned k, int l, int r, int val) {
 void segtree_range_query(SegTree* st, int l, int r, int* results) {
     for (unsigned k = 0; k < st->K; k++) {
         results[k] = range_max(st, k, l, r, st->start, st->end, 1);  // Directly store max value
+    }
+}
+
+void segtree_overwrite(SegTree* source, SegTree* target) {
+    assert(source && target);
+
+    // free existing data in target
+    for (unsigned k = 0; k < target->K; k++) {
+        free(target->tree[k]);
+        free(target->lazy[k]);
+        free(target->ifLazy[k]);
+    }
+    free(target->tree);
+    free(target->lazy);
+    free(target->ifLazy);
+
+    // copy params source -> target
+    target->start = source->start;
+    target->end = source->end;
+    target->K = source->K;
+    target->n = source->n;
+    target->n4 = source->n4;
+
+    // allocate new space
+    target->tree = (int**)malloc(source->K * sizeof(int*));
+    target->lazy = (int**)malloc(source->K * sizeof(int*));
+    target->ifLazy = (bool**)malloc(source->K * sizeof(bool*));
+
+    for (unsigned k = 0; k < source->K; k++) {
+        target->tree[k] = (int*)malloc(source->n4 * sizeof(int));
+        target->lazy[k] = (int*)malloc(source->n4 * sizeof(int));
+        target->ifLazy[k] = (bool*)malloc(source->n4 * sizeof(bool));
+        memcpy(target->ifLazy[k], source->ifLazy[k], source->n4 * sizeof(bool));
+        memcpy(target->tree[k], source->tree[k], source->n4 * sizeof(int));
+        memcpy(target->lazy[k], source->lazy[k], source->n4 * sizeof(int));
     }
 }

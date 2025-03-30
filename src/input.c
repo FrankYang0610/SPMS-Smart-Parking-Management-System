@@ -18,6 +18,7 @@ Request fetch_input() {
 Request file_input(FILE* file) {
     char input[1000];
     if (fgets(input, 1000, file) != NULL) {
+        printf("Processing: %s\n", input);
         return preprocess_input(input);
     }
     return (Request){INVALID};
@@ -51,7 +52,6 @@ Request preprocess_input(char* input) {
 void parse_input(const char tokens[8][100], Request* req) {
     const char* type = tokens[0];
 
-    
     // special requests
     if (compare(type, "addBatch")) {
         // addBatch -xxxxx  
@@ -69,9 +69,6 @@ void parse_input(const char tokens[8][100], Request* req) {
         strcpy(req->algo, tokens[1] + 1); // + 1 to skip the '-'
         return;
     }
-
-
-    // regular requests
 
     // priority: Event > Reservation > Parking > Essentials
     // use convention: priority value smaller is higher priority
@@ -203,3 +200,4 @@ void parse_input(const char tokens[8][100], Request* req) {
     printf("Unrecognized Command: %s\n", type);
     req->type = INVALID;
 }
+
