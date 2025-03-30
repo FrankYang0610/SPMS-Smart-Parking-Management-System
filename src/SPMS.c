@@ -42,8 +42,8 @@ int main() {
         switch (req.type) {
             case BATCH: {
                 bool is_termination = process_batch(queues, &req, stats, trackers, &invalid_cnt);
-                if (is_termination) {
-                    req.type = TERMINATE;
+                if (!is_termination) {
+                    break;
                 }
                 __attribute__((fallthrough));
             }

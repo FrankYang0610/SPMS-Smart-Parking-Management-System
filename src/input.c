@@ -17,9 +17,10 @@ Request fetch_input() {
 
 Request file_input(FILE* file) {
     char input[1000];
-    fscanf(file, "%s", input);
-    fgets(input, 1000, file);
-    return preprocess_input(input);
+    if (fgets(input, 1000, file) != NULL) {
+        return preprocess_input(input);
+    }
+    return (Request){INVALID};
 }
 
 Request preprocess_input(char* input) {

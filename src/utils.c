@@ -26,7 +26,7 @@ void strip_no_semicolon(char* str) {
 
     assert(end >= start);
     size_t len = (unsigned)(end - start + 1);
-    memmove(start, start, len);
+    memmove(str, start, len);
     str[len] = '\0';
 }
 
@@ -136,8 +136,8 @@ const char* get_valid_pair(const char* essential) {
     // return the paired essential item
     // return NULL if the essential item is invalid
 
-    if (compare(essential, "battery")) return "cables";
-    if (compare(essential, "cables")) return "battery";
+    if (compare(essential, "battery")) return "cable";
+    if (compare(essential, "cable")) return "battery";
     if (compare(essential, "locker")) return "umbrella";
     if (compare(essential, "umbrella")) return "locker";
     if (compare(essential, "InflationService")) return "valetPark";
@@ -147,11 +147,11 @@ const char* get_valid_pair(const char* essential) {
 
 void add_essential_value(char* original_code, const char* essential) {
     // struct Request object uses binary to represent the requested essential items
-    // It uses 3 bit binary, each bit represetend [battery + cable], [locker + umbrella], [inflation service + valet parking] respectively
+    // It uses 3 bit binary, each bit represent [battery + cable], [locker + umbrella], [inflation service + valet parking] respectively
     // E.g., 0b011 = (battery + cable) + (inflation + valet);
     // this function updates the binary code based on the given
 
-    if (compare(essential, "battery") || compare(essential, "cables")) *original_code |= 0b100;
+    if (compare(essential, "battery") || compare(essential, "cable")) *original_code |= 0b100;
     if (compare(essential, "locker") || compare(essential, "umbrella")) *original_code |= 0b010;
     if (compare(essential, "InflationService") || compare(essential, "valetPark")) *original_code |= 0b001;
 }
