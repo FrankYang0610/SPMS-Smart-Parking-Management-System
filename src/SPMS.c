@@ -36,24 +36,22 @@ int main() {
         
         switch (req.type) {
             case BATCH: {
-                bool is_termination = process_batch(queue, &req, &invalid_cnt);
-                if (!is_termination) {
-                    break;
+                bool is_end = process_batch(queue, &req, &invalid_cnt);
+                if (is_end) {
+                    printf("Bye!");
+                    return 0;
                 }
-                __attribute__((fallthrough));
+                break;
             }
             case TERMINATE:
                 printf("Bye!");
-                return EXIT_SUCCESS;
+                return 0;
             case PRINT: {
                 const pid_t pid = fork();
                 if (pid < 0) {
                     perror("fork");
-                    exit(EXIT_FAILURE);
+                    exit(0);
                 } else if (pid == 0) {
-                    printf("DEBUG: A fork() has been called.\n");
-                    printf("DEBUG: Here is the child process to run the schedulers and print all bookings. pid = %d.\n\n", getpid());
-
                     schedule_and_print_bookings(req.algo, queue, invalid_cnt);
                     exit(0);
                 } else {
@@ -74,5 +72,5 @@ int main() {
         }
     }
 
-    return EXIT_SUCCESS;
+    return 0;
 }

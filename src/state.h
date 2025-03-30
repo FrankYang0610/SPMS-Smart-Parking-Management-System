@@ -25,7 +25,6 @@ typedef struct Tracker {
     SegTree* park;  // parking slots
 } Tracker;
 
-
 void init_tracker(Tracker* tr);
 void init_statistics(Statistics* stats);
 void reset_statistics(Statistics* stats);

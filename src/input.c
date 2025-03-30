@@ -27,10 +27,8 @@ Request preprocess_input(char* input) {
     Request req = {INVALID}; // or use {.type = INVALID} in C99 and later.
 
     strip_no_semicolon(input); // TODO: revise the strip() function here later
-    printf("DEBUG: strip success: \"%s\"\n", input);
 
     char **result = split(input);
-    printf("DEBUG: split success. TOKENS: \n");
     for (int i = 0; i < 8 && result[i]; i++) {
         printf("\tToken %d: \"%s\"\n", i, result[i]);
     }
@@ -86,7 +84,6 @@ void parse_input(const char tokens[8][100], Request* req) {
     char member = parse_member(tokens[1]); // member = 'A', 'B', 'C' ...
     int start = parse_time(tokens[2], tokens[3]); // YYYY-MM-DD, hh:mm
     int duration = parse_duration(tokens[4]); // n.n
-    printf("DEBUG: member: %c, start: %d, duration: %d\n", member, start, duration);
 
     if (member == 0) {
         req->type = INVALID;
@@ -118,7 +115,6 @@ void parse_input(const char tokens[8][100], Request* req) {
         const char* ccc = tokens[6];
 
         int essentials_cnt = (bool)(strlen(bbb)) + (bool)(strlen(ccc)); // how many essentials parameter
-        printf("DEBUG: addParking pre, essentials_cnt = %d\n", essentials_cnt);
 
         if (essentials_cnt && get_valid_pair(bbb) == NULL) {
             req->type = INVALID;
@@ -136,7 +132,6 @@ void parse_input(const char tokens[8][100], Request* req) {
         req->essential = 0;
         add_essential_value(&(req->essential), bbb);
         add_essential_value(&(req->essential), ccc);
-        printf("DEBUG: essentials %d\n", req->essential);
         return;
     }
     

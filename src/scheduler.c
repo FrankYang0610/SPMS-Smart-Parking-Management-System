@@ -34,15 +34,14 @@ bool process_batch(Vector* queue, Request* req, int* invalid_cnt) {
     
     while (!feof(fp)) {
         Request rq = file_input(fp);
-
         switch (rq.type) {
-            case BATCH: {
-                bool is_termination = process_batch(queue, &rq, invalid_cnt);
-                if (!is_termination) {
-                    break;
+            case BATCH: 
+                bool is_end = process_batch(queue, &rq, invalid_cnt);
+                if (is_end) {
+                    fclose(fp);
+                    return true;
                 }
-                __attribute__((fallthrough));
-            }
+                break;
             case TERMINATE:
                 fclose(fp);
                 return true;
@@ -51,8 +50,6 @@ bool process_batch(Vector* queue, Request* req, int* invalid_cnt) {
                 break;
             case PRINT:
                 if (fork() == 0) {
-                    printf("A fork() has been called.\n");
-                    printf("Here is the child process to run the schedulers and print all bookings. pid = %d.\n\n", getpid());
                     schedule_and_print_bookings(req->algo, queue, *invalid_cnt);
                     exit(0);
                 } else {
@@ -117,7 +114,6 @@ void run_opti(Vector* queue, Statistics* stats, Tracker* tracker) {
         opti_delete(rejected, accepted, tracker);
         opti_greedy(rejected, accepted, tracker, true);
         double tmp_util = opti_util(accepted);
-        printf("DEBUG: OPTI NEW UTIL: %lf\n", tmp_util);
         if (opti_accept(tmp_util, cur_util)) {
             cur_util = tmp_util;
             opti_backup(rejected, accepted);
