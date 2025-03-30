@@ -1,6 +1,6 @@
-### SPMS - Source Code Navigation
+# SmartPark: A Smart Parking Management System for PolyU Using OS-Level Process Coordination
 
-This file helps our group members (also our judge) to understand the program structure.
+Yuqi Wang, Xikun Yang, Siyuan Liu, Yixiao Jin
 
 > **Important for Everyone!**
 > 
@@ -8,28 +8,22 @@ This file helps our group members (also our judge) to understand the program str
 
 > **Implementation Note**
 > 
-> We implemented various data structures here, including a Vector (refer to `src/vector.h` and `src/vector.c`) and a Segment Tree (refer to `src/segtree.h` and `src/segtree.c`). Certain functions of these data structures should remain _private_ and should not be accessed by other modules. 
-> 
-> The Vector is designed for this program only. It includes a member `next`, this member is for the scheduler only, denoting the next `Request` object to process.
+> We implemented various data structures here, including a Dynamic Array (refer to `src/vector.h` and `src/vector.c`) and a Lazy Propagation Segment Tree (refer to `src/segtree.h` and `src/segtree.c`). As for schedulers, we implemented three scheduling algorithms: **First-Come-First-Serve (FCFS), Priority Scheduling (PRIO), and Optimal Scheduling (OPTI)**. **The OPTI scheduler is implemented using Longest-Job-First and Simulated Annealing (SA), and is therefore also referred to as the LJF-SA Scheduler.**
 
-#### Implementations
-The user input will be **pre-processed** and encapsulated into a `Request` object (it seems not reasonable to use the term _object_ in C, but actually this project requires some object-oriented philosophies.) `Request` is defined in `input.h`. We used compact storage for member names, for example, we store `A` instead of the full name `member_A`.
+## Build Guide
 
-We implemented three scheduling algorithms: **FCFS** (denoted as `fcfs` in program), **Priority** (denoted as `prio` in program) and **Optimal Scheduling** (denoted as `opti` in program). For each scheduling algorithm, there are three associative structures:
-- `Statistics stat` - keeps track of accepted and rejected requests.
-- `Vector queue` - part of the online scheduling algorithm. When a new request has been made, it will be put into the `queue` for each scheduling algorithm, respectively. We are still discussing the implementation here under an offline algorithm.
-- `Tracker tracker` - keeps track of the occupied time ranges for each resource. Several `SegTree`s are used for maintaining intervals and range queries.
-
-#### Build Guide
+### Build with `gcc`
 Please create a project folder first. Then move the `src/` folder into the project folder. Finally, build the whole project folder. 
 
-Using the following command to build the project with `gcc`: **(Still under discussion...)**
+Use the `cd` command to change the working directory to the project folder, then run this `gcc` command to build the project:
 ```
-gcc -I./src src/SPMS.c src/input.c src/analyzer.c src/output.c src/scheduler.c src/utils.c src/vector.c src/segtree.c src/state.c -o SPMS -Wall -Wextra -Wshadow -Wconversion  -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -O2
+gcc -I./src src/SPMS.c src/input.c src/output.c src/scheduler.c src/utils.c src/vector.c src/segtree.c src/state.c -o SPMS -Wall -Wextra -Wshadow -Wconversion  -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -O2
 ```
 
-#### Build with CMake
-Using the following script to build this project with CMake:
+### Build with CMake
+
+Since the CMake for this project was created using JetBrains CLion, we recommend that you create a new project in CLion, move the `src/` folder to the project directory, then add the following code to the `CMakeLists.txt` file. Afterward, use "Reload CMake Project" to apply the changes. Finally, you can run the entire project.
+
 ```CMake
 cmake_minimum_required(VERSION 3.30)
 project(COMP2432_GroupProject_SPMS C)
@@ -56,4 +50,3 @@ else()
     )
 endif()
 ```
-It is strongly suggested to clone the repo using `git clone`.

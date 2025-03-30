@@ -26,7 +26,7 @@ void strip_no_semicolon(char* str) {
 
     assert(end >= start);
     size_t len = (unsigned)(end - start + 1);
-    memmove(start, start, len);
+    memmove(str, start, len);
     str[len] = '\0';
 }
 
@@ -147,7 +147,7 @@ const char* get_valid_pair(const char* essential) {
 
 void add_essential_value(char* original_code, const char* essential) {
     // struct Request object uses binary to represent the requested essential items
-    // It uses 3 bit binary, each bit represetend [battery + cable], [locker + umbrella], [inflation service + valet parking] respectively
+    // It uses 3 bit binary, each bit represent [battery + cable], [locker + umbrella], [inflation service + valet parking] respectively
     // E.g., 0b011 = (battery + cable) + (inflation + valet);
     // this function updates the binary code based on the given
 

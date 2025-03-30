@@ -29,7 +29,7 @@ bool process_batch(Vector* queue, Request* req, int* invalid_cnt) {
 
     if (fp == NULL) {
         printf("Error: Cannot open the batch file %s\n", file);
-        return true;
+        return false;
     }
     
     while (!feof(fp)) {
@@ -37,15 +37,15 @@ bool process_batch(Vector* queue, Request* req, int* invalid_cnt) {
 
         switch (rq.type) {
             case BATCH: {
-                bool is_termination = process_batch(queue, &rq, invalid_cnt);
-                if (is_termination) {
-                    rq.type = TERMINATE;
+                bool is_termination = process_batch(queues, &rq, stats, trackers, invalid_cnt);
+                if (!is_termination) {
+                    break;
                 }
                 __attribute__((fallthrough));
             }
             case TERMINATE:
                 fclose(fp);
-                return false;
+                return true;
             case REQUEST:
                 process_request(queue, &rq);
                 break;
