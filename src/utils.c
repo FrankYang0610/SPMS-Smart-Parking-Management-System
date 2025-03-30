@@ -114,7 +114,6 @@ char parse_member(const char* member) {
 
     if (strlen(member) != 9 || strncmp(member, "-member_", 8) != 0) return 0;
     char member_char = member[8];
-    printf("DEBUG: member_char: %c\n", member_char);
     if (member_char < 'A' || member_char > 'E' || member[9] != '\0') return 0;
     return member_char;
 
