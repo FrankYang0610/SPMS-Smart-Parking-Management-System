@@ -27,6 +27,14 @@ void vector_free(Vector *vec) {
     vec->size = vec->capacity = 0;
 }
 
+void vector_deepfree(Vector *vec) {
+    for (int i = 0; i < vec->size; i++) {
+        free(vec->data[i].file);
+        free(vec->data[i].algo);
+    }
+    vector_free(vec);
+}
+
 int cmp_start(const void *a, const void *b) {
     const Request *ra = (const Request*)a;
     const Request *rb = (const Request*)b;
@@ -45,6 +53,23 @@ int cmp_duration(const void *a, const void *b) {
     return ra->duration - rb->duration;
 }
 
+int cmp_volume_cnt(const void *a, const void *b) {
+    const Request *ra = (const Request*)a;
+    const Request *rb = (const Request*)b;
+    int a_cnt = 0, b_cnt = 0;
+    a_cnt += (ra->parking) ? 1 : 0;
+    b_cnt += (rb->parking) ? 1 : 0;
+    for (int i = 0; i < 3; i++) {
+        int mask = (1 << (2 - i));
+        if (ra->essential & mask) a_cnt++;
+        if (rb->essential & mask) b_cnt++;
+    }
+    int tmp = ra->duration * a_cnt - rb->duration * b_cnt;
+    if (tmp != 0) return tmp;
+    return a_cnt - b_cnt;
+}
+
+
 void vector_qsort(Vector *vec, int l, int r, int (*cmp)(const void*, const void*)) {
     assert (r - l + 1 >= 0);
     qsort(vec->data + l, (size_t)(r - l + 1), sizeof(Request), cmp);
@@ -59,4 +84,13 @@ Vector* vector_copy(Vector* vec) {
         copy->data[i] = vec->data[i];
     }
     return copy;
+}
+
+void vector_overwrite(Vector* source, Vector* target) {
+    vector_free(target);
+    target->data = malloc((unsigned)source->capacity * sizeof(Request));
+    target->capacity = source->capacity;
+    for (int i = 0; i < source->size; i++) {
+        vector_add(target, source->data[i]);
+    }
 }

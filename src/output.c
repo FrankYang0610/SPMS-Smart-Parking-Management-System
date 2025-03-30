@@ -23,7 +23,7 @@
 #define TYPE_LEN        13
 #define DEVICE_LEN      29
 
-#define TOTAL_MINUTES   8640  // 6 * 1440
+#define TOTAL_MINUTES   10080  // 7 * 1440
 
 
 typedef enum {

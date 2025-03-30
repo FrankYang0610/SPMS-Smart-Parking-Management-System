@@ -136,8 +136,8 @@ const char* get_valid_pair(const char* essential) {
     // return the paired essential item
     // return NULL if the essential item is invalid
 
-    if (compare(essential, "battery")) return "cables";
-    if (compare(essential, "cables")) return "battery";
+    if (compare(essential, "battery")) return "cable";
+    if (compare(essential, "cable")) return "battery";
     if (compare(essential, "locker")) return "umbrella";
     if (compare(essential, "umbrella")) return "locker";
     if (compare(essential, "InflationService")) return "valetPark";
@@ -151,7 +151,7 @@ void add_essential_value(char* original_code, const char* essential) {
     // E.g., 0b011 = (battery + cable) + (inflation + valet);
     // this function updates the binary code based on the given
 
-    if (compare(essential, "battery") || compare(essential, "cables")) *original_code |= 0b100;
+    if (compare(essential, "battery") || compare(essential, "cable")) *original_code |= 0b100;
     if (compare(essential, "locker") || compare(essential, "umbrella")) *original_code |= 0b010;
     if (compare(essential, "InflationService") || compare(essential, "valetPark")) *original_code |= 0b001;
 }
@@ -168,89 +168,93 @@ int get_priority(const char* type) {
     return 4;
 }
 
+// Try to response a request.
+// This function will process both parking request and essential request(s).
+bool try_put(int order, int start, int end, bool parking, char essential, Tracker* tracker) {
 
-/*
-char** split1(const char* input, size_t* argc) {
-    if (input == NULL || *input == '\0') {
-        return NULL;
-    }
+    unsigned pk = 999, ek[3];
+    ek[0] = ek[1] = ek[2] = 999;
 
-    *argc = 0;
-    char* _input = strdup(input);
-    char* _input_orig = _input;  // save a copy of the strdup-ed string. In the end of this func, free _input_orig.
+	/* TRY PARKING */
 
-    if (_input == NULL) {
-        return NULL;
-    }
+	if (parking) {
+		int buffer[10];
+		segtree_range_query(tracker->park, start, end, buffer);
+		for (unsigned k = 0; k < 10; k++) {
+			if (buffer[k] == 0) {
+                pk = k;
+                break;
+            }
+            if (k == 9) return false;
+		}
+	}
 
-    size_t len = strlen(_input);
+    SegTree* st_list[3] = {
+        tracker->bc,
+        tracker->lu,
+        tracker->vi
+    };
 
-    bool in_arg = false;
-    for (int i = 0; i < len; i++) {
-        if (is_separator(_input[i])) {
-            in_arg = false;
-        } else if (!in_arg) { // the beginning of a new argument
-            in_arg = true;
-            (*argc)++;
+    if (essential > 0) {
+        for (int e = 0; e < 3; e++) {
+            if (essential & (1 << (2 - e))) {
+                int buffer[3];
+                segtree_range_query(st_list[e], start, end, buffer);
+                for (unsigned k = 0; k < 3; k++) {
+                    if (buffer[k] == 0) {
+                        ek[e] = k;
+                        break;
+                    }
+                    if (k == 2) return false;
+                }
+            }
         }
     }
 
-    char** result = (char**)malloc(sizeof(char*) * (*argc));
-
-    if (result == NULL) {
-        return NULL;
+    if (pk != 999) {
+        segtree_range_set(tracker->park, pk, start, end, order);
     }
 
-    int pargc = 0; // processed argument count
-    char* delimiters = strtok(_input, SEP_CHARS);
-
-    while (delimiters != NULL) {
-        result[pargc++] = strdup(delimiters);
-        delimiters = strtok(NULL, SEP_CHARS);
-    }
-
-    free(_input_orig);
-    return result;
-}
-
-char* strip(const char* str) {
-    if (str == NULL || *str == '\0') {
-        return NULL;
-    }
-
-    char* _str = strdup(str);
-    size_t len = strlen(_str);
-
-    // strip the head and add a new head
-    int start = 0;
-    while (start < len && is_separator(_str[start])) {
-        start++;
-    }
-
-    if (start == len) {
-        free(_str);
-        return NULL;
-    }
-
-    // strip the end and add a new end
-    int end = (int)len - 1;
-    while (end >= start && is_separator(_str[end])) {
-        end--;
-    }
-
-    _str[end + 1] = '\0';
-    return _str;
-}
-
-*/
-
-/*
-static bool is_separator(const char c) {
-    for (int i = 0; SEP_CHARS[i] != '\0'; i++) {
-        if (c == SEP_CHARS[i]) {
-            return true;
+    for (int i = 0; i < 3; i++) {
+        if (ek[i] != 999) {
+            segtree_range_set(st_list[i], ek[i], start, end, order);
         }
     }
-    return false;
+
+    return true;
 }
-*/
+
+void try_delete(int order, int start, int end, bool parking, char essential, Tracker* tracker) {
+    if (parking) {
+        int buffer[10];
+        segtree_range_query(tracker->park, start, end, buffer);
+        for (unsigned k = 0; k < 10; k++) {
+            if (buffer[k] == order) {
+                segtree_range_set(tracker->park, k, start, end, 0);
+                break;
+            }
+            assert(k != 9);
+        }
+    }
+
+    if (essential > 0) {
+        SegTree* st_list[3] = {
+            tracker->bc,
+            tracker->lu,
+            tracker->vi
+        };
+        for (int e = 0; e < 3; e++) {
+            if (essential & (1 << (2 - e))) {
+                int buffer[3];
+                segtree_range_query(st_list[e], start, end, buffer);
+                for (unsigned k = 0; k < 3; k++) {
+                    if (buffer[k] == order) {
+                        segtree_range_set(st_list[e], k, start, end, 0);
+                        break;
+                    }
+                    assert(k != 2);
+                }
+            }
+        }
+    }
+}

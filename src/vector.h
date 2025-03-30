@@ -15,6 +15,7 @@ typedef struct Vector {
 void vector_init(Vector *vec);
 void vector_add(Vector *vec, Request req);
 void vector_free(Vector *vec);
+void vector_deepfree(Vector *vec);
 
 /**
  * Sort the [l, r] segment of the vector using quick sort algorithm. l, r are both inclusive
@@ -25,10 +26,19 @@ void vector_free(Vector *vec);
  */
 void vector_qsort(Vector *vec, int l, int r, int (*cmp)(const void*, const void*));
 Vector* vector_copy(Vector* vec);
+void vector_overwrite(Vector* vec, Vector* target);
 
 int cmp_start(const void *a, const void *b);
 int cmp_priority(const void *a, const void *b);
 int cmp_duration(const void *a, const void *b);
 
+/**
+ * Comparator function for vector_qsort
+ * This function is used to sort the vector by volume then count
+ * I.e., 
+ *  - first sort by duration * number of types of resources requested
+ *  - If equal, then sort by number of types of resources requested
+ */
+int cmp_volume_cnt(const void *a, const void *b);
 
 #endif

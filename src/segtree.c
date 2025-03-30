@@ -108,6 +108,16 @@ void segtree_destroy(SegTree* st) {
     }
 }
 
+void segtree_empty(SegTree* st) {
+    for (unsigned k = 0; k < st->K; k++) {
+        for (unsigned i = 0; i < st->n4; i++) {
+            st->tree[k][i] = 0;
+            st->lazy[k][i] = 0;
+            st->ifLazy[k][i] = false;
+        }
+    }
+}
+
 void segtree_range_set(SegTree* st, unsigned k, int l, int r, int val) {
     range_set(st, k, l, r, val, st->start, st->end, 1);
 }

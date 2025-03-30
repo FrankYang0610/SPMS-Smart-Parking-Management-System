@@ -26,6 +26,12 @@ SegTree* segtree_build(int start, int end, unsigned K);
 void segtree_destroy(SegTree* st);
 
 /**
+ * Resets all segment trees to empty state
+ * @param st        Pointer to the segment tree to be emptied
+ */
+void segtree_empty(SegTree* st);
+
+/**
  * Updates a specific segment tree instance within the collection
  * 
  * @param st        Handle from segtree_build()
