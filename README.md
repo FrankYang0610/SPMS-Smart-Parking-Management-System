@@ -16,8 +16,14 @@ Yuqi Wang, Xikun Yang, Siyuan Liu, Yixiao Jin
 Please create a project folder first. Then move the `src/` folder into the project folder. Finally, build the whole project folder. 
 
 Use the `cd` command to change the working directory to the project folder, then run this `gcc` command to build the project:
+```shell
+gcc -I./src src/*.c -o SPMS -lm -Wall -Wextra -Wshadow -Wconversion  -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -O2
 ```
-gcc -I./src src/SPMS.c src/input.c src/output.c src/scheduler.c src/utils.c src/vector.c src/segtree.c src/state.c -o SPMS -Wall -Wextra -Wshadow -Wconversion  -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -O2
+
+Or alternatively,
+
+```shell
+gcc -I./src src/SPMS.c src/input.c src/opti.c src/output.c src/rng.c src/scheduler.c src/segtree.c src/state.c src/utils.c src/vector.c -o SPMS -lm Wall -Wextra -Wshadow -Wconversion  -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -O2
 ```
 
 ### Build with CMake
