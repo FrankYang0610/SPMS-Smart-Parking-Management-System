@@ -179,10 +179,10 @@ print_algorithm_report(const char* algo_name, Statistics* stat, const int invali
         if (req->essential & 0b001) { rate_inflation_service_valet_parking += duration; }
     }
 
-    rate_parking /= TOTAL_MINUTES;
-    rate_battery_cable /= TOTAL_MINUTES;
-    rate_locker_umbrella /= TOTAL_MINUTES;
-    rate_inflation_service_valet_parking /= TOTAL_MINUTES;
+    rate_parking /= (TOTAL_MINUTES * 10);
+    rate_battery_cable /= (TOTAL_MINUTES * 3);
+    rate_locker_umbrella /= (TOTAL_MINUTES * 3);
+    rate_inflation_service_valet_parking /= (TOTAL_MINUTES * 3);
 
     printf("         Utilization of Time Slot:\n");
     printf("               Parking:           - %.2f%%\n", rate_parking * 100.00);
