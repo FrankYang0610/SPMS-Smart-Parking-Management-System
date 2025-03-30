@@ -29,9 +29,6 @@ Request preprocess_input(char* input) {
     strip_no_semicolon(input); // TODO: revise the strip() function here later
 
     char **result = split(input);
-    for (int i = 0; i < 8 && result[i]; i++) {
-        printf("\tToken %d: \"%s\"\n", i, result[i]);
-    }
 
     char tokens[8][100];
     for (int i = 0; i < 8 && result[i]; i++) {
@@ -145,7 +142,7 @@ void parse_input(const char tokens[8][100], Request* req) {
 
         if (essentials_cnt != 2) {
             req->type = INVALID;
-            printf("Invalid Number of Essentials: Received %d\n", essentials_cnt);
+            printf("Invalid Number of Essentials: Received %d arguments, expected 2\n", essentials_cnt);
             return;
         }
 

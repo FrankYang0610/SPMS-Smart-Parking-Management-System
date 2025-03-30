@@ -24,7 +24,6 @@
 int main() {
     int invalid_cnt = 0;
     seed(1389ULL, 74135ULL);
-    for (int i = 0; i < 10; i++) printf("%lf\n", randd());
 
     Vector* queue = malloc(sizeof(Vector)); 
     vector_init(queue);
