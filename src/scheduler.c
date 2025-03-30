@@ -35,13 +35,13 @@ bool process_batch(Vector* queue, Request* req, int* invalid_cnt) {
     while (!feof(fp)) {
         Request rq = file_input(fp);
         switch (rq.type) {
-            case BATCH: 
+            case BATCH: {
                 bool is_end = process_batch(queue, &rq, invalid_cnt);
-                if (is_end) {
-                    fclose(fp);
-                    return true;
+                if (!is_end) {
+                    break;
                 }
-                break;
+                __attribute__((fallthrough));
+            }
             case TERMINATE:
                 fclose(fp);
                 return true;
