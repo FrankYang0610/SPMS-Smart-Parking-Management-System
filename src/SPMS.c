@@ -38,6 +38,7 @@ int main() {
         switch (req.type) {
             case BATCH: {
                 bool is_end = process_batch(queue, &req, &invalid_cnt);
+                printf("-> [Pending]\n")
                 if (!is_end) {
                     break;
                 }
@@ -56,15 +57,17 @@ int main() {
                     exit(0);
                 } else {
                     wait(NULL);
+                    printf("-> [Done]\n");
                 }
                 break;
             }
             case REQUEST:
                 process_request(queue, &req);
                 // Scheduling algorithms will be called in case PRINT. [Revision Mar 25]
+                printf("-> [Pending]\n")
                 break;
             case INVALID:
-                printf("The request is invalid. Please check and try again!\n");
+                printf("-> [Invalid]\n")
                 invalid_cnt++;
                 break;
             default:

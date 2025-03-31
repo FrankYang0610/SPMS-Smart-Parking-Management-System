@@ -89,7 +89,7 @@ def generate_command():
 
     return command.replace(" ;", ";")
 
-def generate_batch_file(n, output_file="batch.dat"):
+def generate_batch_file(n, output_file="batch-dp.dat"):
     with open(output_file, "w") as f:
         for _ in range(n):
             command = generate_command()

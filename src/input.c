@@ -117,13 +117,13 @@ void parse_input(const char tokens[8][100], Request* req) {
 
         if (essentials_cnt && get_valid_pair(bbb) == NULL) {
             req->type = INVALID;
-            printf("Invalid Essential Item: %s\n", bbb);
+            printf("[addParking] Invalid Essential Item: %s\n", bbb);
             return;
         }
 
         if (essentials_cnt == 2 && !is_valid_essentials_pair(bbb, ccc)) {
             req->type = INVALID;
-            printf("Invalid Essentials Pair: %s %s\n", bbb, ccc);
+            printf("[addParking] Invalid Essentials Pair: %s %s\n", bbb, ccc);
             return;
         }
 
@@ -144,13 +144,13 @@ void parse_input(const char tokens[8][100], Request* req) {
 
         if (essentials_cnt != 2) {
             req->type = INVALID;
-            printf("Invalid Number of Essentials: Received %d arguments, expected 2\n", essentials_cnt);
+            printf("[addReservation] Invalid Number of Essentials: Received %d arguments, expected 2\n", essentials_cnt);
             return;
         }
 
         if (!is_valid_essentials_pair(bbb, ccc)) {
             req->type = INVALID;
-            printf("Invalid Essentials Pair: %s %s\n", bbb, ccc);
+            printf("[addReservation] Invalid Essentials Pair: %s %s\n", bbb, ccc);
             return;
         }
 
@@ -167,7 +167,7 @@ void parse_input(const char tokens[8][100], Request* req) {
         for (int i = 5; i <= 7; i++) {
             if (tokens[i][0] && get_valid_pair(tokens[i]) == NULL) {
                 req->type = INVALID;
-                printf("Invalid Essential Item: %s\n", tokens[i]);
+                printf("[addEvent] Invalid Essential Item: %s\n", tokens[i]);
                 return;
             }
         }
@@ -190,9 +190,15 @@ void parse_input(const char tokens[8][100], Request* req) {
         // no parking + essentials (mandatory), i.e., only book essentials without parking
 
         const char* bbb = tokens[5];
+        if (strlen(bbb) == 0) {
+            req->type = INVALID;
+            printf("[bookEssentials] No Essential Item Received!\n");
+            return;
+        }
+
         if (get_valid_pair(bbb) == NULL) {
             req->type = INVALID;
-            printf("Invalid Essential Item: %s\n", bbb);
+            printf("[bookEssentials] Invalid Essential Item: %s\n", bbb);
             return;
         }
 

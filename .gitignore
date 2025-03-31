@@ -19,3 +19,4 @@ compile.sh
 
 .DS_Store
 .vscode/
+.VSCodeCounter/
