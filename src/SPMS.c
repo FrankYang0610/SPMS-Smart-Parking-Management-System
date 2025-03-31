@@ -31,6 +31,7 @@ int main() {
     vector_init(queue);
 
     printf("~~ WELCOME TO PolyU ~~\n");
+    printf("The OPTI scheduler may take some time to run, please be patient!\n");
 
     while (true) {
         Request req = fetch_input();
@@ -38,7 +39,7 @@ int main() {
         switch (req.type) {
             case BATCH: {
                 bool is_end = process_batch(queue, &req, &invalid_cnt);
-                printf("-> [Pending]\n")
+                printf("-> [Pending]\n");
                 if (!is_end) {
                     break;
                 }
@@ -64,10 +65,10 @@ int main() {
             case REQUEST:
                 process_request(queue, &req);
                 // Scheduling algorithms will be called in case PRINT. [Revision Mar 25]
-                printf("-> [Pending]\n")
+                printf("-> [Pending]\n");
                 break;
             case INVALID:
-                printf("-> [Invalid]\n")
+                printf("-> [Invalid]\n");
                 invalid_cnt++;
                 break;
             default:

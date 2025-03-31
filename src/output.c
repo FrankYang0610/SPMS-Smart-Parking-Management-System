@@ -501,6 +501,7 @@ void schedule_and_print_bookings (char *algo, Vector* queue, const int invalid_c
 
     if (is_opti) {
         write(pipe_ptoc[2][1], &(PipeMessageType){PRINT_BOOKINGS}, sizeof(PipeMessageType));
+        printf("The OPTI scheduler may take some time to run, please be patient!\n\n");
         read(pipe_ctop[2][0], &buffer, sizeof(PipeMessageType));
     }
 
