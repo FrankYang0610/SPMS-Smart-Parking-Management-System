@@ -328,7 +328,7 @@ schedule_and_print_bookings_single_algo(
 
     PipeMessageType buffer;
 
-    read(pipe_ptoc[0], &buffer, sizeof(PipeMessageType));
+        (void)read(pipe_ptoc[0], &buffer, sizeof(PipeMessageType));
 
 
     if (buffer == PRINT_BOOKINGS) {
@@ -378,13 +378,13 @@ schedule_and_print_bookings_single_algo(
 
     }
 
-    write(pipe_ctop[1], &(PipeMessageType){DONE}, sizeof(PipeMessageType));
+    (void)write(pipe_ctop[1], &(PipeMessageType){DONE}, sizeof(PipeMessageType));
 
-    read(pipe_ptoc[0], &buffer, sizeof(PipeMessageType));
+    (void)read(pipe_ptoc[0], &buffer, sizeof(PipeMessageType));
 
     if (buffer == PRINT_REPORT) {
         print_algorithm_report(algo_name, stat, invalid_cnt);
-        write(pipe_ctop[1], &(PipeMessageType){DONE}, sizeof(PipeMessageType));
+        (void)write(pipe_ctop[1], &(PipeMessageType){DONE}, sizeof(PipeMessageType));
     }
 
 }
@@ -490,19 +490,19 @@ void schedule_and_print_bookings (char *algo, Vector* queue, const int invalid_c
     PipeMessageType buffer;
 
     if (is_fcfs) {
-        write(pipe_ptoc[0][1], &(PipeMessageType){PRINT_BOOKINGS}, sizeof(PipeMessageType));
-        read(pipe_ctop[0][0], &buffer, sizeof(PipeMessageType));
+        (void)write(pipe_ptoc[0][1], &(PipeMessageType){PRINT_BOOKINGS}, sizeof(PipeMessageType));
+        (void)read(pipe_ctop[0][0], &buffer, sizeof(PipeMessageType));
     }
 
     if (is_prio) {
-        write(pipe_ptoc[1][1], &(PipeMessageType){PRINT_BOOKINGS}, sizeof(PipeMessageType));
-        read(pipe_ctop[1][0], &buffer, sizeof(PipeMessageType));
+        (void)write(pipe_ptoc[1][1], &(PipeMessageType){PRINT_BOOKINGS}, sizeof(PipeMessageType));
+        (void)read(pipe_ctop[1][0], &buffer, sizeof(PipeMessageType));
     }
 
     if (is_opti) {
-        write(pipe_ptoc[2][1], &(PipeMessageType){PRINT_BOOKINGS}, sizeof(PipeMessageType));
+        (void)write(pipe_ptoc[2][1], &(PipeMessageType){PRINT_BOOKINGS}, sizeof(PipeMessageType));
         printf("The OPTI scheduler may take some time to run, please be patient!\n\n");
-        read(pipe_ctop[2][0], &buffer, sizeof(PipeMessageType));
+        (void)read(pipe_ctop[2][0], &buffer, sizeof(PipeMessageType));
     }
 
 
@@ -512,14 +512,14 @@ void schedule_and_print_bookings (char *algo, Vector* queue, const int invalid_c
         printf("*** Parking Booking Manager - Summary Report ***\n\n");
         printf("Performance:\n\n");
 
-        write(pipe_ptoc[0][1], &(PipeMessageType){PRINT_REPORT}, sizeof(PipeMessageType));
-        read(pipe_ctop[0][0], &buffer, sizeof(PipeMessageType));
+        (void)write(pipe_ptoc[0][1], &(PipeMessageType){PRINT_REPORT}, sizeof(PipeMessageType));
+        (void)read(pipe_ctop[0][0], &buffer, sizeof(PipeMessageType));
 
-        write(pipe_ptoc[1][1], &(PipeMessageType){PRINT_REPORT}, sizeof(PipeMessageType));
-        read(pipe_ctop[1][0], &buffer, sizeof(PipeMessageType));
+        (void)write(pipe_ptoc[1][1], &(PipeMessageType){PRINT_REPORT}, sizeof(PipeMessageType));
+        (void)read(pipe_ctop[1][0], &buffer, sizeof(PipeMessageType));
 
-        write(pipe_ptoc[2][1], &(PipeMessageType){PRINT_REPORT}, sizeof(PipeMessageType));
-        read(pipe_ctop[2][0], &buffer, sizeof(PipeMessageType));
+        (void)write(pipe_ptoc[2][1], &(PipeMessageType){PRINT_REPORT}, sizeof(PipeMessageType));
+        (void)read(pipe_ctop[2][0], &buffer, sizeof(PipeMessageType));
 
         printf("\n");
     }

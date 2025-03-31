@@ -90,7 +90,7 @@ void run_prio(Vector* queue, Statistics* stats, Tracker* tracker) {
     }
 }
 
-// Simulated Annealing (SA) + Improved LJF Greedy Algorihthm.
+// Simulated Annealing (SA) + Improved LJF Greedy Algorithm.
 void run_opti(Vector* queue, Statistics* stats, Tracker* tracker) {
     Vector* rejected = malloc(sizeof(Vector));
     Vector* accepted = malloc(sizeof(Vector));

@@ -9,7 +9,7 @@
 
 /* GENERIC STRING MANIPULATION */
 
-// using isspace() to cover all delimiters (' ', \f, \t, \n, \r, \v, etc.)
+[[deprecated("Use strip() instead")]]
 void strip_no_semicolon(char* str) {
     if (str == NULL || *str == '\0') return;
 
@@ -48,12 +48,12 @@ char** split(const char* str) {
     return res;
 }
 
-[[deprecated("Use strip_no_semicolon() instead")]]
+
 void strip(char* str) {
     int n = (int)strlen(str);
-    printf("stripping \"%s\"\n", str);
+    // printf("stripping \"%s\"\n", str);
     int i = 0, pre = 0;
-    while (str[pre] == ' ') pre++;
+    while (isspace(str[pre])) pre++; // using isspace() to cover all delimiters (' ', \f, \t, \n, \r, \v, etc.)
     for (i = pre; i < n && str[i] != ';'; i++) {
         str[i - pre] = str[i];
     }
@@ -61,7 +61,7 @@ void strip(char* str) {
 }
 
 bool compare(const char* str1, const char* str2) {
-    for (int i = 0; str1[i] == str2[i]; i++) {
+    for (int i = 0; str1[i] == str2[i] || tolower(str1[i]) == tolower(str2[i]); i++) {
         if (str1[i] == 0) return true;
     }
     return false;
@@ -136,7 +136,7 @@ const char* get_valid_pair(const char* essential) {
     // return NULL if the essential item is invalid
 
     if (compare(essential, "battery")) return "cable";
-    if (compare(essential, "cable")) return "battery";
+    if (compare(essential, "cable") || compare(essential, "cables")) return "battery";
     if (compare(essential, "locker")) return "umbrella";
     if (compare(essential, "umbrella")) return "locker";
     if (compare(essential, "InflationService")) return "valetPark";
@@ -150,7 +150,7 @@ void add_essential_value(char* original_code, const char* essential) {
     // E.g., 0b011 = (battery + cable) + (inflation + valet);
     // this function updates the binary code based on the given
 
-    if (compare(essential, "battery") || compare(essential, "cable")) *original_code |= 0b100;
+    if (compare(essential, "battery") || compare(essential, "cable") || compare(essential, "cables")) *original_code |= 0b100;
     if (compare(essential, "locker") || compare(essential, "umbrella")) *original_code |= 0b010;
     if (compare(essential, "InflationService") || compare(essential, "valetPark")) *original_code |= 0b001;
 }

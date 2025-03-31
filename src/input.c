@@ -20,13 +20,13 @@ Request file_input(FILE* file) {
     if (fgets(input, 1000, file) != NULL) {
         return preprocess_input(input);
     }
-    return (Request){INVALID};
+    return (Request){INVALID, 0, 0, 0, 0, 0, 0, 0, NULL, NULL}; // or use {.type = INVALID} in C99 and later.
 }
 
 Request preprocess_input(char* input) {
-    Request req = {INVALID}; // or use {.type = INVALID} in C99 and later.
+    Request req = {INVALID, 0, 0, 0, 0, 0, 0, 0, NULL, NULL}; // or use {.type = INVALID} in C99 and later.
 
-    strip_no_semicolon(input); // TODO: revise the strip() function here later
+    strip(input);
 
     char **result = split(input);
 
