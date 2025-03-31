@@ -18,7 +18,6 @@ Request fetch_input() {
 Request file_input(FILE* file) {
     char input[1000];
     if (fgets(input, 1000, file) != NULL) {
-        printf("Processing: %s\n", input);
         return preprocess_input(input);
     }
     return (Request){INVALID};

@@ -71,13 +71,10 @@ void run_fcfs(Vector* queue, Statistics* stats, Tracker* tracker) {
         int end = req.start + req.duration - 1;
         if (try_put(req.order, req.start, end, req.parking, req.essential, tracker)) { 
             vector_add(&stats->accepted, req);
-            printf("The FCFS scheduler has [accepted] the request.\n");
         } else {
             vector_add(&stats->rejected, req);
-            printf("The FCFS scheduler has [rejected] the request.\n");
         }
     }
-    printf("The FCFS scheduler is updated.\n");
 }
 
 void run_prio(Vector* queue, Statistics* stats, Tracker* tracker) {
@@ -87,22 +84,10 @@ void run_prio(Vector* queue, Statistics* stats, Tracker* tracker) {
         int end = req.start + req.duration - 1;
         if (try_put(req.order, req.start, end, req.parking, req.essential, tracker)) { 
             vector_add(&stats->accepted, req);
-            printf("The PRIO scheduler has [accepted] the request.\n");
         } else {
             vector_add(&stats->rejected, req);
-            printf("The PRIO scheduler has [rejected] the request.\n");
         }
     }
-    printf("The PRIO scheduler is updated.\n");
-}
-
-static void debug_util(Vector* accepted) {
-    int total = 0;
-    for (int i = 0; i < accepted->size; i++) {
-        Request req = accepted->data[i];
-        if (req.essential & 0b100) total += req.duration;
-    }
-    printf("DEBUG: run_opti utilization of essential = %d vs %d\n", total, (7 * 24 * 3 * 60));
 }
 
 // Simulated Annealing (SA) + Improved LJF Greedy Algorihthm.
@@ -139,8 +124,6 @@ void run_opti(Vector* queue, Statistics* stats, Tracker* tracker) {
         }
         opti_iter();
     }
-
-    printf("DEBUG: finished\n");
     
     vector_qsort(rejected, 0, rejected->size - 1, cmp_volume_cnt);
     opti_greedy(rejected, accepted, tracker, false);

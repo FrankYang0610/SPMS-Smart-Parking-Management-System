@@ -27,7 +27,6 @@ void vector_deepfree(Vector *vec);
 void vector_qsort(Vector *vec, int l, int r, int (*cmp)(const void*, const void*));
 void vector_overwrite(Vector* vec, Vector* target);
 
-int cmp_start(const void *a, const void *b);
 int cmp_priority(const void *a, const void *b);
 int cmp_duration(const void *a, const void *b);
 

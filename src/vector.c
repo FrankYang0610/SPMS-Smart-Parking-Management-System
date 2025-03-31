@@ -35,16 +35,22 @@ void vector_deepfree(Vector *vec) {
     vector_free(vec);
 }
 
-int cmp_start(const void *a, const void *b) {
-    const Request *ra = (const Request*)a;
-    const Request *rb = (const Request*)b;
-    return ra->start - rb->start;
+static int is_work_hour(int start, int end) {
+    // check if [start, end] within 8:00 AM ~ 8:00 PM
+    assert(start <= end);
+    int start_h = (start % (24 * 60)) / 60;
+    int end_h = (end % (24 * 60)) / 60;
+    return (start_h >= 8 && end_h < 20) ? 1 : 0;
 }
 
 int cmp_priority(const void *a, const void *b) {
     const Request *ra = (const Request*)a;
     const Request *rb = (const Request*)b;
-    return ra->priority - rb->priority;
+    int prio_diff = ra->priority - rb->priority;
+    if (prio_diff != 0) return prio_diff;
+    int is_work_a = is_work_hour(ra->start, ra->start + ra->duration - 1);
+    int is_work_b = is_work_hour(rb->start, rb->start + rb->duration - 1);
+    return is_work_b - is_work_a;
 }
 
 int cmp_duration(const void *a, const void *b) {
