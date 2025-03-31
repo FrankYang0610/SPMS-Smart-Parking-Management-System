@@ -8,7 +8,7 @@ Yuqi Wang, Xikun Yang, Siyuan Liu, Yixiao Jin
 
 > **Implementation Note**
 > 
-> We implemented various data structures here, including a Dynamic Array (refer to `src/vector.h` and `src/vector.c`) and a Lazy Propagation Segment Tree (refer to `src/segtree.h` and `src/segtree.c`). As for schedulers, we implemented three scheduling algorithms: **First-Come-First-Serve (FCFS), Priority Scheduling (PRIO), and Optimal Scheduling (OPTI)**. **The OPTI scheduler is implemented using Longest-Job-First and Simulated Annealing (SA), and is therefore also referred to as the LJF-SA Scheduler.**
+> We implemented various data structures here, including a Dynamic Array (refer to `src/vector.h` and `src/vector.c`) and a Lazy Propagation Segment Tree (refer to `src/segtree.h` and `src/segtree.c`). As for schedulers, we implemented three scheduling algorithms: **First-Come-First-Serve (FCFS), Priority Scheduling (PRIO), and Optimal Scheduling (OPTI)**. The OPTI scheduler combines the Longest-Job-First approach with Simulated Annealing (SA) and is also known as the **GAPS (Greedy Annealed Probabilistic Scheduler)**.
 
 ## Build Guide
 
