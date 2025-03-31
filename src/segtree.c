@@ -120,6 +120,16 @@ void segtree_empty(SegTree* st) {
 }
 
 void segtree_range_set(SegTree* st, unsigned k, int l, int r, int val) {
+    if (val == 0) { // if we want to set 0, assert there must be value in the range
+        int buffer[st->K];
+        segtree_range_query(st, l, r, buffer);
+        assert(buffer[k] > 0);
+    } else { // else must be empty
+        int buffer[st->K];
+        segtree_range_query(st, l, r, buffer);
+        assert(buffer[k] == 0);
+    }
+
     range_set(st, k, l, r, val, st->start, st->end, 1);
 }
 

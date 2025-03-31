@@ -98,7 +98,6 @@ void opti_greedy(Vector* rejected, Vector* accepted, Tracker* tracker, bool rand
             vector_add(tmp_rejected, *req);
         }
     }
-
     vector_overwrite(tmp_rejected, rejected);
 }
 
@@ -116,7 +115,6 @@ void opti_delete(Vector* rejected, Vector* accepted, Tracker* tracker) {
             vector_add(tmp_accepted, *req);
         }
     }
-
     vector_overwrite(tmp_accepted, accepted);
 }
 

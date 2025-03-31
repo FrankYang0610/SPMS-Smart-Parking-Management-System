@@ -96,6 +96,15 @@ void run_prio(Vector* queue, Statistics* stats, Tracker* tracker) {
     printf("The PRIO scheduler is updated.\n");
 }
 
+static void debug_util(Vector* accepted) {
+    int total = 0;
+    for (int i = 0; i < accepted->size; i++) {
+        Request req = accepted->data[i];
+        if (req.essential & 0b100) total += req.duration;
+    }
+    printf("DEBUG: run_opti utilization of essential = %d vs %d\n", total, (7 * 24 * 3 * 60));
+}
+
 // Simulated Annealing (SA) + Improved LJF Greedy Algorihthm.
 void run_opti(Vector* queue, Statistics* stats, Tracker* tracker) {
     Vector* rejected = malloc(sizeof(Vector));
@@ -112,28 +121,36 @@ void run_opti(Vector* queue, Statistics* stats, Tracker* tracker) {
     while (opti_running()) {
         vector_qsort(rejected, 0, rejected->size - 1, cmp_volume_cnt);
         opti_delete(rejected, accepted, tracker);
-        // printf("DEBUG: opti deleted\n");
+        // printf("DEBUG: delete\n");
         opti_greedy(rejected, accepted, tracker, true);
+        // printf("DEBUG: greedy\n");
         double tmp_util = opti_util(accepted);
+        // printf("DEBUG: NEW UTIL = %.3lf\n", tmp_util);
         if (opti_accept(tmp_util, cur_util)) {
             cur_util = tmp_util;
             opti_backup(rejected, accepted, tracker);
+            // printf("ACCEPTED\n");
+            // debug_util(accepted);
         }
         else {
             opti_rollback(rejected, accepted, tracker);
+            // printf("REJECTED, rolling back\n");
+            // debug_util(accepted);
         }
         opti_iter();
     }
 
+    printf("DEBUG: finished\n");
+    
     vector_qsort(rejected, 0, rejected->size - 1, cmp_volume_cnt);
     opti_greedy(rejected, accepted, tracker, false);
 
     /* Free Memory */
     vector_overwrite(accepted, &stats->accepted);
     vector_overwrite(rejected, &stats->rejected);
-
     vector_free(accepted);
     vector_free(rejected);
     free(accepted);
     free(rejected);
+
 }

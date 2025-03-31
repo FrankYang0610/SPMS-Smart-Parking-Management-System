@@ -97,6 +97,12 @@ void parse_input(const char tokens[8][100], Request* req) {
         return; 
     }
 
+    if (start + duration - 1 > parse_time("2025-05-16", "23:59")) {
+        req->type = INVALID;
+        printf("Invalid Time: %s %s exceeds 2025-05-16\n", tokens[2], tokens[3]);
+        return;
+    }
+
     req->member = member;
     req->start = start;
     req->duration = duration;

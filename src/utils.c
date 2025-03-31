@@ -170,7 +170,7 @@ int get_priority(const char* type) {
 // Try to response a request.
 // This function will process both parking request and essential request(s).
 bool try_put(int order, int start, int end, bool parking, char essential, Tracker* tracker) {
-
+    assert(order > 0);
     unsigned pk = 999, ek[3];
     ek[0] = ek[1] = ek[2] = 999;
 
@@ -224,6 +224,7 @@ bool try_put(int order, int start, int end, bool parking, char essential, Tracke
 }
 
 void try_delete(int order, int start, int end, bool parking, char essential, Tracker* tracker) {
+    assert(order > 0);
     if (parking) {
         int buffer[10];
         segtree_range_query(tracker->park, start, end, buffer);
@@ -232,10 +233,7 @@ void try_delete(int order, int start, int end, bool parking, char essential, Tra
                 segtree_range_set(tracker->park, k, start, end, 0);
                 break;
             }
-            if (k == 9) {
-                printf("DEBUG: cant find req %d to delete!\n", order);
-                assert(false);
-            }
+            assert(k != 9);
         }
     }
 

@@ -28,7 +28,8 @@ def generate_random_essentials(command):
 
 # Generate 1000 random instructions
 instructions = []
-for _ in range(1000):
+N = 3000
+for _ in range(N):
     user_name = random.choice(user_names)
     command_type = random.choice(command_types)
     datetime = generate_random_datetime()
@@ -55,4 +56,4 @@ with open('batch001.dat', 'w') as file:
         else:
             file.write(instruction + '\n') 
 
-print("1000 instructions have been generated and saved in 'batch001.dat'.")
+print(f"{N} instructions have been generated and saved in 'batch001.dat'.")
