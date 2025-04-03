@@ -85,27 +85,20 @@ SegTree* segtree_build(int start, int end, unsigned K) {
 }
 
 void segtree_destroy(SegTree* st) {
-    if (st) {
-        if (st->tree) {
-            for (unsigned k = 0; k < st->K; k++) {
-                free(st->tree[k]);
-            }
-            free(st->tree);
-        }
-        if (st->lazy) {
-            for (unsigned k = 0; k < st->K; k++) {
-                free(st->lazy[k]);
-            }
-            free(st->lazy);
-        }
-        if (st->ifLazy) {
-            for (unsigned k = 0; k < st->K; k++) {
-                free(st->ifLazy[k]);
-            }
-            free(st->ifLazy);
-        }
-        free(st);
+    assert(st != NULL);
+    if (st->tree) {
+        for (unsigned k = 0; k < st->K; k++) free(st->tree[k]);
+        free(st->tree);
     }
+    if (st->lazy) {
+        for (unsigned k = 0; k < st->K; k++) free(st->lazy[k]);
+        free(st->lazy);
+    }
+    if (st->ifLazy) {
+        for (unsigned k = 0; k < st->K; k++) free(st->ifLazy[k]);
+        free(st->ifLazy);
+    }
+    free(st);
 }
 
 void segtree_empty(SegTree* st) {

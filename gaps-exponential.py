@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import random
 import matplotlib.pyplot as plt
 import math
@@ -5,7 +6,6 @@ from copy import deepcopy
 import bisect
 import numpy as np
 from multiprocessing import Pool
-
 
 def generate_requests(M, max_L=120, min_len=1, max_len=20):
     requests = []
@@ -20,56 +20,53 @@ def generate_requests(M, max_L=120, min_len=1, max_len=20):
         requests.append((L, R, frozenset(selected_types)))
     return requests
 
-def generate_requests_new(M, max_L=168, min_len=1, max_len=14):
+def generate_requests_new(M, max_L=8640, min_len=1, max_len=1440):
     """
-       Generate M requests following the specified distributions:
-       - Start times (L) follow a bimodal normal distribution with peaks at 10:00 and 14:00.
-       - Durations (len_) follow an exponential distribution, with longer durations at night.
+    Generate M requests following the new problem setting with priority categories.
+    Each request is a 4-tuple: (L, R, req_types, category) where:
+      • Event:      Must include type 0; optionally include any of {1,2,3} (each with chance 0.5).
+      • Reservation: Must include type 0 and exactly one from {1,2,3}.
+      • Parking:     Must include type 0; optionally add at most one from {1,2,3}.
+      • Essentials:  Must NOT include type 0; choose exactly one from {1,2,3}.
+    Here L is chosen at random between 1 and max_L, a request lasts for a random
+    duration between min_len and max_len (and if the end time exceeds max_L the request is skipped).
     """
-
     requests = []
-
-    # Define parameters for the bimodal normal distribution
-    mu_1 = [10 + 24 * d for d in range(7)]  # Peaks at 10:00 AM each day
-    mu_2 = [14 + 24 * d for d in range(7)]  # Peaks at 2:00 PM each day
-    sigma = 1  # Standard deviation (1 hour)
-    weights = [0.5, 0.5]  # Equal weights for morning and afternoon peaks
-
-    # Define lambda for the exponential distribution based on time of day
-    def lambda_for_time(t):
-        tau = t % 24  # Map to single-day range [0, 24)
-        if (20 <= tau < 24) or (0 <= tau <= 4):  # Nighttime
-            return 1 / 10  # Average duration = 10 hours
-        else:  # Daytime
-            return 1 / 2  # Average duration = 2 hours
-
-    # Generate requests
-    for _ in range(M):
-        # Generate start time (L) from the bimodal normal distribution
-        if random.random() < weights[0]:
-            L = int(np.random.normal(random.choice(mu_1), sigma))
-        else:
-            L = int(np.random.normal(random.choice(mu_2), sigma))
-
-        # Ensure L is within the valid range [0, max_L)
-        L = max(0, min(L, max_L - 1))
-
-        # Generate parking duration (len_) from the exponential distribution
-        lambda_ = lambda_for_time(L)
-        len_ = int(np.random.exponential(1 / lambda_))
-        len_ = max(min_len, min(len_, max_len))  # Ensure len_ is within [min_len, max_len]
-
-        # Calculate end time (R)
+    categories = ["Event", "Reservation", "Parking", "Essentials"]
+    m = 0
+    while m < M:
+        L = random.randint(1, max_L)
+        len_ = random.randint(min_len, max_len)
         R = L + len_ - 1
-        if R >= max_L:  # Discard requests exceeding the time range
+        if R > max_L:
             continue
+        else:
+            m += 1
 
-        # Randomly select essentials
-        num = random.randint(1, 4)
-        selected_types = frozenset(random.sample([0, 1, 2, 3], num))
+        # Randomly assign a category
+        cat = random.choice(categories)
+        if cat == "Event":
+            # Mandatory type 0; optionally add any of 1,2,3 independently.
+            req_types = {0}
+            for t in [1, 2, 3]:
+                if random.random() < 0.5:
+                    req_types.add(t)
+        elif cat == "Reservation":
+            # Must include 0 and exactly one from {1,2,3}
+            req_types = {0}
+            req_types.add(random.choice([1, 2, 3]))
+        elif cat == "Parking":
+            # Must include 0; optionally add at most one from {1,2,3}
+            req_types = {0}
+            if random.random() < 0.5:  # 50% chance to add an extra type
+                req_types.add(random.choice([1, 2, 3]))
+        elif cat == "Essentials":
+            # Must NOT include 0; choose exactly one from {1,2,3}
+            req_types = {random.choice([1, 2, 3])}
+        else:
+            req_types = {0}  # Fallback; should not occur
 
-        requests.append((L, R, selected_types))
-
+        requests.append((L, R, frozenset(req_types), cat))
     return requests
 
 def check_overlap_sorted(sorted_intervals, L_new, R_new):
@@ -84,7 +81,6 @@ def check_overlap_sorted(sorted_intervals, L_new, R_new):
             return True
     return False
 
-
 def fcfs_algorithm(requests, N, K):
     resources = {
         0: [[] for _ in range(N)],
@@ -93,8 +89,9 @@ def fcfs_algorithm(requests, N, K):
         3: [[] for _ in range(K)]
     }
 
+    # Here each request is now a 4-tuple; we use only the first three elements.
     for req in requests:
-        L, R, req_types = req
+        L, R, req_types = req[0], req[1], req[2]
         allocated = {rt: None for rt in req_types}
 
         for rt in req_types:
@@ -112,7 +109,6 @@ def fcfs_algorithm(requests, N, K):
 
     return resources
 
-
 def ljf_algorithm(requests, N, K):
     requests_sorted = sorted(
         requests,
@@ -123,8 +119,42 @@ def ljf_algorithm(requests, N, K):
     )
     return fcfs_algorithm(requests_sorted, N, K)
 
+def priority_algorithm(requests, N, K):
+    """
+    Implements a simple greedy scheduling based on priority.
+    Priority order: Event > Reservation > Parking > Essentials.
+    Requests are sorted by this level (highest first); then for each request we try to find
+    available resource instances for all required resource types.
+    """
+    resources = {
+        0: [[] for _ in range(N)],
+        1: [[] for _ in range(K)],
+        2: [[] for _ in range(K)],
+        3: [[] for _ in range(K)]
+    }
+    # Define the priority mapping: higher numeric value means higher priority.
+    priority_map = {"Event": 4, "Reservation": 3, "Parking": 2, "Essentials": 1}
 
-# 新增两个辅助函数：用于一次性获取所有调度的请求、以及原子性删除某个请求
+    sorted_requests = sorted(requests, key=lambda x: priority_map[x[3]], reverse=True)
+
+    for req in sorted_requests:
+        L, R, req_types, cat = req
+        allocated = {}
+        for rt in req_types:
+            found = False
+            for inst in resources[rt]:
+                if not check_overlap_sorted(inst, L, R):
+                    allocated[rt] = inst
+                    found = True
+                    break
+            if not found:
+                break
+        else:
+            for rt in req_types:
+                bisect.insort(allocated[rt], req)
+    return resources
+
+# New helper functions remain unchanged.
 def get_scheduled_requests(resources):
     scheduled = set()
     for res_list in resources.values():
@@ -132,15 +162,13 @@ def get_scheduled_requests(resources):
             scheduled.update(inst)
     return scheduled
 
-
 def remove_request_from_resources(resources, req):
-    # 对于请求req（包含多个资源类型），在每个相关资源的所有实例上尝试删除（如果存在的话）
-    _, __, types = req
+    # For each resource type in the request, attempt to remove the request from every instance.
+    _, __, types, *_ = req
     for rt in types:
         for inst in resources[rt]:
             if req in inst:
                 inst.remove(req)
-
 
 def sa_ljf_algorithm(requests, N, K, p=0.95, q=0.3, max_iter=2000, temp_start=10, decay=0.995):
     resources = {
@@ -161,9 +189,9 @@ def sa_ljf_algorithm(requests, N, K, p=0.95, q=0.3, max_iter=2000, temp_start=10
     accepted = []
     rejected = []
 
-    # 初始阶段采用贪心（类似 LJF）策略分配请求
+    # Initial greedy assignment (similar to LJF)
     for req in req_sorted:
-        L, R, types = req
+        L, R, types, *_ = req
         allocated = {}
         success = True
 
@@ -194,7 +222,6 @@ def sa_ljf_algorithm(requests, N, K, p=0.95, q=0.3, max_iter=2000, temp_start=10
         temp_res = deepcopy(current_res)
         temp_rejected = rejected.copy()
 
-        # 使用原子性删除：先获取当前所有完整调度的请求
         scheduled = list(get_scheduled_requests(temp_res))
         for req in scheduled:
             if random.random() < q:
@@ -211,7 +238,7 @@ def sa_ljf_algorithm(requests, N, K, p=0.95, q=0.3, max_iter=2000, temp_start=10
         )
         new_rej = []
         for req in reinsertion_list:
-            L, R, types = req
+            L, R, types, *_ = req
             allocated = {}
             success = True
 
@@ -252,7 +279,6 @@ def sa_ljf_algorithm(requests, N, K, p=0.95, q=0.3, max_iter=2000, temp_start=10
 
     return best_res
 
-
 def calculate_utilization(resources, N_val, K_val, requests):
     if not requests:
         return 0.0
@@ -266,12 +292,11 @@ def calculate_utilization(resources, N_val, K_val, requests):
     for res_type in resources:
         for inst in resources[res_type]:
             for req in inst:
-                L, R, _ = req
+                L, R = req[0], req[1]
                 total_time += (R - L + 1)
 
     total_devices = N_val + 3 * K_val
     return total_time / (total_devices * T)
-
 
 def run_trial(args):
     M, N_val, K_val = args
@@ -290,11 +315,13 @@ def run_trial(args):
         print("Error in SA:", e)
         sa_u = 0.0
 
-    return (fcfs_u, ljf_u, sa_u)
+    resources_priority = priority_algorithm(requests, N_val, K_val)
+    priority_u = calculate_utilization(resources_priority, N_val, K_val, requests)
 
+    return (fcfs_u, ljf_u, sa_u, priority_u)
 
 def run_simulation(N_val, K_val, M_values, num_trials=50):
-    fcfs_data, ljf_data, sa_data = [], [], []
+    fcfs_data, ljf_data, sa_data, priority_data = [], [], [], []
 
     with Pool() as pool:
         for M in M_values:
@@ -304,34 +331,36 @@ def run_simulation(N_val, K_val, M_values, num_trials=50):
 
             fcfs_avg = np.mean([r[0] for r in results])
             ljf_avg = np.mean([r[1] for r in results])
-            sa_avg = np.mean([r[2] for r in results])
+            sa_avg    = np.mean([r[2] for r in results])
+            priority_avg = np.mean([r[3] for r in results])
 
             fcfs_data.append(fcfs_avg)
             ljf_data.append(ljf_avg)
             sa_data.append(sa_avg)
+            priority_data.append(priority_avg)
 
-            print(f"M={M}: FCFS={fcfs_avg:.3f}, LJF={ljf_avg:.3f}, SA={sa_avg:.3f}")
+            print(f"M={M}: FCFS={fcfs_avg:.3f}, LJF={ljf_avg:.3f}, SA-LJF={sa_avg:.3f}, Priority={priority_avg:.3f}")
 
-    return fcfs_data, ljf_data, sa_data
-
+    return fcfs_data, ljf_data, sa_data, priority_data
 
 if __name__ == '__main__':
     N = 10
     K = 3
+    # Uncomment one of the following M_values definitions as desired.
     # M_values = list(range(20, 501, 100))
     # M_values = [10, 20, 40, 60, 100, 140, 180, 240, 300, 500, 1000]
     # M_values = list(range(1000, 100001, 1000))
-    M_values = [100, 500, 1000, 2000]
-    num_trials = 10
+    M_values = [10, 20, 40, 60, 100, 140, 180, 240, 300]
+    num_trials = 8
 
-    fcfs, ljf, sa = run_simulation(N, K, M_values, num_trials)
+    fcfs, ljf, sa, priority = run_simulation(N, K, M_values, num_trials)
 
-    plt.figure(figsize=(12, 7))
+    plt.figure(figsize=(9, 6))
+    plt.plot(M_values, sa, marker='D', label='GAPS (OURS)', linestyle='-.', color='red')
+    plt.plot(M_values, priority, marker='^', label='PRIO', linestyle=':', color='magenta')
     plt.plot(M_values, fcfs, marker='o', label='FCFS', linestyle='-', color='blue')
-    plt.plot(M_values, ljf, marker='s', label='LJF', linestyle='--', color='green')
-    plt.plot(M_values, sa, marker='D', label='SA-LJF', linestyle='-.', color='red')
 
-    plt.title(f'Algorithm Comparison (N={num_trials})', fontsize=14)
+    plt.title(f'Algorithm Comparison (num_trials={num_trials})', fontsize=14)
     plt.xlabel("Number of Requests (M)", fontsize=12)
     plt.ylabel("Average Utilization", fontsize=12)
     plt.legend()

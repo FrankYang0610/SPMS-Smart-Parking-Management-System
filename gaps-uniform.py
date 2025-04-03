@@ -8,7 +8,17 @@ from multiprocessing import Pool
 
 
 def generate_requests(M, max_L=8640, min_len=1, max_len=1440):
+    """
+    Generate M requests. Each request is a 4-tuple: (L, R, req_types, category)
+    where the resource types and category are assigned according to:
+
+      • Event:      Must include type 0; optionally include any of {1,2,3} (each with chance 0.5).
+      • Reservation: Must include type 0 and exactly one from {1,2,3}.
+      • Parking:     Must include type 0; optionally add at most one from {1,2,3}.
+      • Essentials:  Must NOT include type 0; must include exactly one from {1,2,3}.
+    """
     requests = []
+    categories = ["Event", "Reservation", "Parking", "Essentials"]
     m = 0
     while m < M:
         L = random.randint(1, max_L)
@@ -18,15 +28,39 @@ def generate_requests(M, max_L=8640, min_len=1, max_len=1440):
             continue
         else:
             m += 1
-        selected_types = set()
-        while len(selected_types) < 1:
-            num = random.randint(1, 4)
-            selected_types = random.sample([0, 1, 2, 3], num)
-        requests.append((L, R, frozenset(selected_types)))
+
+        # Randomly assign a category
+        cat = random.choice(categories)
+        if cat == "Event":
+            # Mandatory type 0; optionally add any of 1,2,3 independently.
+            req_types = {0}
+            for t in [1, 2, 3]:
+                if random.random() < 0.5:
+                    req_types.add(t)
+        elif cat == "Reservation":
+            # Must include 0 and exactly one of {1,2,3}
+            req_types = {0}
+            req_types.add(random.choice([1, 2, 3]))
+        elif cat == "Parking":
+            # Must include 0; optionally add at most one of {1,2,3}
+            req_types = {0}
+            if random.random() < 0.5:  # 50% chance to add an extra type
+                req_types.add(random.choice([1, 2, 3]))
+        elif cat == "Essentials":
+            # Must NOT include 0; choose exactly one from {1,2,3}
+            req_types = {random.choice([1, 2, 3])}
+        else:
+            req_types = {0}  # Fallback; should not occur
+
+        requests.append((L, R, frozenset(req_types), cat))
     return requests
 
 
 def check_overlap_sorted(sorted_intervals, L_new, R_new):
+    """
+    Given a sorted list of intervals, return True if the new [L_new, R_new]
+    overlaps with any interval in the list.
+    """
     if not sorted_intervals:
         return False
     L_list = [interval[0] for interval in sorted_intervals]
@@ -40,6 +74,10 @@ def check_overlap_sorted(sorted_intervals, L_new, R_new):
 
 
 def fcfs_algorithm(requests, N, K):
+    """
+    First-Come-First-Served algorithm.
+    Uses the (L, R, req_types, cat) tuple.
+    """
     resources = {
         0: [[] for _ in range(N)],
         1: [[] for _ in range(K)],
@@ -48,7 +86,7 @@ def fcfs_algorithm(requests, N, K):
     }
 
     for req in requests:
-        L, R, req_types = req
+        L, R, req_types, cat = req
         allocated = {rt: None for rt in req_types}
 
         for rt in req_types:
@@ -68,17 +106,64 @@ def fcfs_algorithm(requests, N, K):
 
 
 def ljf_algorithm(requests, N, K):
+    """
+    Longest Job First algorithm.
+    Sorts requests in descending order by [length * number of resource types] then by number of types.
+    """
     requests_sorted = sorted(
         requests,
         key=lambda x: (
             - (len(x[2]) * (x[1] - x[0] + 1)),
-            - len(x[2])
+            -len(x[2])
         )
     )
     return fcfs_algorithm(requests_sorted, N, K)
 
 
-# 新增两个辅助函数：用于一次性获取所有调度的请求、以及原子性删除某个请求
+def priority_algorithm(requests, N, K):
+    """
+    Priority algorithm: sorts requests based on the priority level of their category.
+    Priority levels: Event (4) > Reservation (3) > Parking (2) > Essentials (1)
+    Then greedily schedules requests in that order.
+    """
+    priority_mapping = {
+        "Event": 4,
+        "Reservation": 3,
+        "Parking": 2,
+        "Essentials": 1
+    }
+    sorted_requests = sorted(
+        requests,
+        key=lambda x: (priority_mapping.get(x[3], 0), -x[0]),
+        reverse=True
+    )
+    resources = {
+        0: [[] for _ in range(N)],
+        1: [[] for _ in range(K)],
+        2: [[] for _ in range(K)],
+        3: [[] for _ in range(K)]
+    }
+    for req in sorted_requests:
+        L, R, req_types, cat = req
+        allocated = {rt: None for rt in req_types}
+        success = True
+        for rt in req_types:
+            assigned = False
+            for inst in resources[rt]:
+                if not check_overlap_sorted(inst, L, R):
+                    allocated[rt] = inst
+                    assigned = True
+                    break
+            if not assigned:
+                success = False
+                break
+        if success:
+            for rt in req_types:
+                bisect.insort(allocated[rt], req)
+    return resources
+
+
+# Auxiliary functions for the SA algorithm
 def get_scheduled_requests(resources):
     scheduled = set()
     for res_list in resources.values():
@@ -88,8 +173,10 @@ def get_scheduled_requests(resources):
 
 
 def remove_request_from_resources(resources, req):
-    # 对于请求req（包含多个资源类型），在每个相关资源的所有实例上尝试删除（如果存在的话）
-    _, __, types = req
+    """
+    Remove a given request from all resource instances that contain it.
+    """
+    _, __, types, _ = req
     for rt in types:
         for inst in resources[rt]:
             if req in inst:
@@ -97,6 +184,9 @@ def remove_request_from_resources(resources, req):
 
 
 def sa_ljf_algorithm(requests, N, K, p=0.9, q=0.3, max_iter=1000, temp_start=10, decay=0.99):
+    """
+    Simulated Annealing based algorithm (SA-LJF).
+    """
     resources = {
         0: [[] for _ in range(N)],
         1: [[] for _ in range(K)],
@@ -108,16 +198,16 @@ def sa_ljf_algorithm(requests, N, K, p=0.9, q=0.3, max_iter=1000, temp_start=10,
         requests,
         key=lambda x: (
             - (len(x[2]) * (x[1] - x[0] + 1)),
-            - len(x[2])
+            -len(x[2])
         )
     )
 
     accepted = []
     rejected = []
 
-    # 初始阶段采用贪心（类似 LJF）策略分配请求
+    # Initial greedy assignment (similar to LJF)
     for req in req_sorted:
-        L, R, types = req
+        L, R, types, cat = req
         allocated = {}
         success = True
 
@@ -148,7 +238,7 @@ def sa_ljf_algorithm(requests, N, K, p=0.9, q=0.3, max_iter=1000, temp_start=10,
         temp_res = deepcopy(current_res)
         temp_rejected = rejected.copy()
 
-        # 使用原子性删除：先获取当前所有完整调度的请求
+        # Randomly remove some scheduled requests (atomic removal)
         scheduled = list(get_scheduled_requests(temp_res))
         for req in scheduled:
             if random.random() < q:
@@ -160,12 +250,12 @@ def sa_ljf_algorithm(requests, N, K, p=0.9, q=0.3, max_iter=1000, temp_start=10,
             temp_rejected,
             key=lambda x: (
                 - (len(x[2]) * (x[1] - x[0] + 1)),
-                - len(x[2])
+                -len(x[2])
             )
         )
         new_rej = []
         for req in reinsertion_list:
-            L, R, types = req
+            L, R, types, cat = req
             allocated = {}
             success = True
 
@@ -208,6 +298,9 @@ def sa_ljf_algorithm(requests, N, K, p=0.9, q=0.3, max_iter=1000, temp_start=10,
 
 
 def calculate_utilization(resources, N_val, K_val, requests):
+    """
+    Calculate average utilization over time.
+    """
     if not requests:
         return 0.0
     T_min = min(req[0] for req in requests)
@@ -220,7 +313,8 @@ def calculate_utilization(resources, N_val, K_val, requests):
     for res_type in resources:
         for inst in resources[res_type]:
             for req in inst:
-                L, R, _ = req
+                # Extract L and R (works whether req is 3-tuple or 4-tuple)
+                L, R = req[0], req[1]
                 total_time += (R - L + 1)
 
     total_devices = N_val + 3 * K_val
@@ -244,11 +338,14 @@ def run_trial(args):
         print("Error in SA:", e)
         sa_u = 0.0
 
-    return (fcfs_u, ljf_u, sa_u)
+    resources_priority = priority_algorithm(requests, N_val, K_val)
+    priority_u = calculate_utilization(resources_priority, N_val, K_val, requests)
+
+    return (fcfs_u, ljf_u, sa_u, priority_u)
 
 
 def run_simulation(N_val, K_val, M_values, num_trials=30):
-    fcfs_data, ljf_data, sa_data = [], [], []
+    fcfs_data, ljf_data, sa_data, priority_data, sa_std_data = [], [], [], [], []
 
     with Pool() as pool:
         for M in M_values:
@@ -259,32 +356,50 @@ def run_simulation(N_val, K_val, M_values, num_trials=30):
             fcfs_avg = np.mean([r[0] for r in results])
             ljf_avg = np.mean([r[1] for r in results])
             sa_avg = np.mean([r[2] for r in results])
+            priority_avg = np.mean([r[3] for r in results])
+            sa_std = np.std([r[2] for r in results])
 
             fcfs_data.append(fcfs_avg)
             ljf_data.append(ljf_avg)
             sa_data.append(sa_avg)
+            priority_data.append(priority_avg)
+            sa_std_data.append(sa_std)
 
-            print(f"M={M}: FCFS={fcfs_avg:.3f}, LJF={ljf_avg:.3f}, SA={sa_avg:.3f}")
+            print(f"M={M}: FCFS={fcfs_avg:.3f}, LJF={ljf_avg:.3f}, GAPS={sa_avg:.3f}, Priority={priority_avg:.3f}")
 
-    return fcfs_data, ljf_data, sa_data
+    return fcfs_data, ljf_data, sa_data, priority_data, sa_std_data
+
+
+# Function to compute a moving average with initial zero padding.
+def moving_average_with_zero_start(data, window):
+    # Create an array that is padded at the beginning with (window-1) zeros.
+    padded = np.concatenate((np.zeros(window - 1), data))
+    # 'valid' mode returns an output of the same length as data.
+    return np.convolve(padded, np.ones(window)/window, mode='valid')
 
 
 if __name__ == '__main__':
     N = 10
     K = 3
-    # M_values = list(range(20, 501, 100))
-    M_values = [10, 20, 40, 60, 100, 140, 180, 240, 300, 400]
-    num_trials = 30
+    M_values = [10, 20, 40, 60, 100, 140, 180, 240, 300]
+    num_trials = 8
 
-    fcfs, ljf, sa = run_simulation(N, K, M_values, num_trials)
+    # Run the simulation and also retrieve standard deviations for SA (GAPS)
+    fcfs, ljf, sa, priority, sa_std = run_simulation(N, K, M_values, num_trials)
 
-    plt.figure(figsize=(12, 7))
-    plt.plot(M_values, fcfs, marker='o', label='FCFS', linestyle='-', color='blue')
-    plt.plot(M_values, ljf, marker='s', label='LJF', linestyle='--', color='green')
-    plt.plot(M_values, sa, marker='D', label='SA-LJF', linestyle='-.', color='red')
+    plt.figure(figsize=(9, 6))
 
-    plt.title(f'Algorithm Comparison (N={num_trials})', fontsize=14)
-    plt.xlabel("Number of Requests (M)", fontsize=12)
+    # Plot the SA/GAPS line with a red color.
+    plt.plot(M_values, sa, marker='D', label='GAPS (OURS)', linestyle='-.', color='red')
+
+
+    # Also plot additional curves.
+    plt.plot(M_values, priority, marker='^', label='Priority', linestyle=':', color='purple')
+    plt.plot(M_values, fcfs, marker='o', label='FCFS', linestyle=':', color='blue')
+    # plt.plot(M_values, ljf, marker='s', label='LJF', linestyle=':', color='green')
+
+    plt.title(f'Algorithm Comparison (num_trials={num_trials})', fontsize=14)
+    plt.xlabel("Number of Requests", fontsize=12)
     plt.ylabel("Average Utilization", fontsize=12)
     plt.legend()
     plt.grid(True)
