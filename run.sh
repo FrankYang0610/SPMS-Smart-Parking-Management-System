@@ -1,0 +1,1 @@
+gcc -I./src src/*.c -o SPMS -lm -Wall -Wextra -Wshadow -Wconversion  -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -O2

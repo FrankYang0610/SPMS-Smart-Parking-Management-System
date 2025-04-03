@@ -96,4 +96,4 @@ def generate_batch_file(n, output_file="batch-dp.dat"):
             f.write(command + "\n")
     print(f"Batch file with {n} commands generated: {output_file}")
 
-generate_batch_file(2000)
+generate_batch_file(50)
