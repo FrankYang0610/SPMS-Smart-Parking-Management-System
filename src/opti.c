@@ -79,10 +79,10 @@ void opti_rollback(Vector* rejected, Vector* accepted, Tracker* tracker) {
     vector_overwrite(pre_rejected, rejected);
 }
 
-void opti_backup(Vector* rejected, Vector* accpeted, Tracker* tracker) {
+void opti_backup(Vector* rejected, Vector* accepted, Tracker* tracker) {
     tracker_overwrite(tracker, pre_tracker);
     vector_overwrite(rejected, pre_rejected);
-    vector_overwrite(accpeted, pre_accepted);
+    vector_overwrite(accepted, pre_accepted);
 }
 
 void opti_greedy(Vector* rejected, Vector* accepted, Tracker* tracker, bool rand) {

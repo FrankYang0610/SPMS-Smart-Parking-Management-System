@@ -8,7 +8,7 @@ Yuqi Wang, Xikun Yang, Siyuan Liu, Yixiao Jin
 
 > **Implementation Note**
 > 
-> We implemented various data structures here, including a Dynamic Array (refer to `src/vector.h` and `src/vector.c`) and a Lazy Propagation Segment Tree (refer to `src/segtree.h` and `src/segtree.c`). As for schedulers, we implemented three scheduling algorithms: **First-Come-First-Serve (FCFS), Priority Scheduling (PRIO), and Optimal Scheduling (OPTI)**. **The OPTI scheduler is implemented using Longest-Job-First and Simulated Annealing (SA), and is therefore also referred to as the LJF-SA Scheduler.**
+> We implemented various data structures here, including a Dynamic Array (refer to `src/vector.h` and `src/vector.c`) and a Lazy Propagation Segment Tree (refer to `src/segtree.h` and `src/segtree.c`). As for schedulers, we implemented three scheduling algorithms: **First-Come-First-Serve (FCFS), Priority Scheduling (PRIO), and Optimal Scheduling (OPTI)**. The OPTI scheduler combines the Longest-Job-First approach with Simulated Annealing (SA) and is also known as the **GAPS (Greedy Annealed Probabilistic Scheduler)**.
 
 ## Build Guide
 
@@ -23,7 +23,7 @@ gcc -I./src src/*.c -o SPMS -lm -Wall -Wextra -Wshadow -Wconversion  -D_GLIBCXX_
 Or alternatively,
 
 ```shell
-gcc -I./src src/SPMS.c src/input.c src/opti.c src/output.c src/rng.c src/scheduler.c src/segtree.c src/state.c src/utils.c src/vector.c -o SPMS -lm Wall -Wextra -Wshadow -Wconversion  -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -O2
+gcc -I./src src/SPMS.c src/opti.c src/rng.c src/input.c src/output.c src/scheduler.c src/utils.c src/vector.c src/segtree.c src/state.c -o SPMS -lm -Wall -Wextra -Wshadow -Wconversion  -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -O2
 ```
 
 ### Build with CMake
