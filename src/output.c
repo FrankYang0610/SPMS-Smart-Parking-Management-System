@@ -5,12 +5,15 @@
 
 #include "output.h"
 
+#include <assert.h>
+
 #include "scheduler.h"
 #include "state.h"
 #include "vector.h"
 
 #include <unistd.h>
 #include <stdbool.h>
+#include <sys/wait.h>
 
 
 // In this project, we assume there are only five members.
@@ -412,7 +415,9 @@ void schedule_and_print_bookings (char *algo, Vector* queue, const int invalid_c
         pipe(pipe_ctop[0]);     // FCFS scheduler, child to parent
 
         // child process
-        if (fork() == 0) {
+        const pid_t pid = fork();
+        if (pid < 0) { perror("fork"); }
+        if (pid == 0) {
             close(pipe_ptoc[0][1]); // No need to write to ptoc.
             close(pipe_ctop[0][0]); // No need to read from ctop.
 
@@ -438,7 +443,9 @@ void schedule_and_print_bookings (char *algo, Vector* queue, const int invalid_c
         pipe(pipe_ctop[1]);     // PRIO scheduler, child to parent
 
         // child process
-        if (fork() == 0) {
+        const pid_t pid = fork();
+        if (pid < 0) { perror("fork"); }
+        if (pid == 0) {
             close(pipe_ptoc[1][1]); // No need to write to ptoc.
             close(pipe_ctop[1][0]); // No need to read from ctop.
 
@@ -464,7 +471,9 @@ void schedule_and_print_bookings (char *algo, Vector* queue, const int invalid_c
         pipe(pipe_ctop[2]);     // OPTI scheduler, child to parent
 
         // child process
-        if (fork() == 0) {
+        const pid_t pid = fork();
+        if (pid < 0) { perror("fork"); }
+        if (pid == 0) {
             close(pipe_ptoc[2][1]); // No need to write to ptoc.
             close(pipe_ctop[2][0]); // No need to read from ctop.
 
