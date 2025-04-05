@@ -153,6 +153,7 @@ void add_essential_value(char* original_code, const char* essential) {
     if (compare(essential, "battery") || compare(essential, "cable") || compare(essential, "cables")) *original_code |= 0b100;
     if (compare(essential, "locker") || compare(essential, "umbrella")) *original_code |= 0b010;
     if (compare(essential, "InflationService") || compare(essential, "valetPark")) *original_code |= 0b001;
+    if (compare(essential, "inflation") || compare(essential, "valet")) *original_code |= 0b001;
 }
 
 int get_priority(const char* type) {

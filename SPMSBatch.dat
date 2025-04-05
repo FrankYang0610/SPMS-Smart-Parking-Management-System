@@ -1,0 +1,504 @@
+addReservation -member_D 2025-05-11 20:00 7.0 valet locker
+addParking -member_D 2025-05-10 19:00 0.0 inflation valet
+addEvent -member_B 2025-05-11 09:00 10.0 battery cable
+addReservation -member_D 2025-05-13 22:00 8.0 umbrella battery
+addParking -member_D 2025-05-14 11:00 1.0 umbrella locker
+addReservation -member_B 2025-05-14 23:00 7.0 inflation cable
+addEvent -member_B 2025-05-14 19:00 1.0 inflation valet
+addReservation -member_A 2025-05-14 01:00 1.0 locker cable
+addEvent -member_B 2025-05-16 12:00 6.0 inflation valet
+addReservation -member_C 2025-05-16 02:00 8.0 cable locker
+addEvent -member_C 2025-05-11 21:00 4.0 battery inflation
+addReservation -member_B 2025-05-12 05:00 5.0 cable valet
+addParking -member_A 2025-05-12 07:00 2.0 battery inflation
+addReservation -member_C 2025-05-10 19:00 9.0 inflation battery
+addParking -member_D 2025-05-14 22:00 6.0 locker umbrella
+addReservation -member_B 2025-05-10 14:00 0.0 battery umbrella
+addEvent -member_A 2025-05-16 07:00 7.0 locker inflation
+addEvent -member_A 2025-05-16 07:00 1.0 valet battery
+addReservation -member_C 2025-05-13 03:00 3.0 cable valet
+addReservation -member_C 2025-05-15 06:00 1.0 inflation valet
+addEvent -member_B 2025-05-10 14:00 2.0 umbrella battery
+addEvent -member_B 2025-05-13 13:00 3.0 valet inflation
+addEvent -member_D 2025-05-13 08:00 9.0 inflation umbrella
+addParking -member_D 2025-05-16 16:00 9.0 battery umbrella
+addReservation -member_A 2025-05-15 01:00 0.0 valet locker
+addParking -member_B 2025-05-12 22:00 1.0 umbrella inflation
+addParking -member_A 2025-05-12 18:00 3.0 valet locker
+addEvent -member_B 2025-05-11 18:00 3.0 battery umbrella
+addParking -member_E 2025-05-15 11:00 10.0 cable inflation
+addReservation -member_E 2025-05-10 19:00 2.0 inflation valet
+addEvent -member_A 2025-05-10 10:00 10.0 valet battery
+addEvent -member_C 2025-05-12 20:00 0.0 locker valet
+addReservation -member_A 2025-05-10 05:00 7.0 cable umbrella
+addEvent -member_A 2025-05-12 11:00 9.0 battery inflation
+addEvent -member_D 2025-05-15 05:00 10.0 inflation locker
+addReservation -member_D 2025-05-13 13:00 0.0 umbrella locker
+addEvent -member_B 2025-05-10 12:00 5.0 inflation battery
+addParking -member_A 2025-05-13 02:00 6.0 inflation locker
+addParking -member_E 2025-05-16 12:00 7.0 locker cable
+addEvent -member_D 2025-05-13 03:00 10.0 inflation cable
+addEvent -member_B 2025-05-10 00:00 4.0 umbrella inflation
+addReservation -member_B 2025-05-11 06:00 7.0 inflation valet
+addReservation -member_D 2025-05-16 08:00 5.0 umbrella locker
+addEvent -member_D 2025-05-18 22:00 5.0 battery locker
+addEvent -member_B 2025-05-15 15:00 1.0 umbrella locker
+addEvent -member_A 2025-05-16 09:00 4.0 inflation valet
+addReservation -member_D 2025-05-15 21:00 7.0 valet umbrella
+addParking -member_E 2025-05-15 10:00 8.0 inflation cable
+addReservation -member_D 2025-05-14 07:00 1.0 battery umbrella
+addParking -member_D 2025-05-13 19:00 2.0 cable valet
+addReservation -member_D 2025-05-12 15:00 2.0 cable valet
+addEvent -member_D 2025-05-11 00:00 3.0 battery umbrella
+addEvent -member_D 2025-05-12 07:00 9.0 umbrella valet
+addParking -member_D 2025-05-10 09:00 1.0 valet umbrella
+addReservation -member_D 2025-05-16 18:00 8.0 inflation battery
+addParking -member_B 2025-05-11 15:00 0.0 cable locker
+addReservation -member_D 2025-05-15 17:00 6.0 battery locker
+addReservation -member_D 2025-05-14 18:00 6.0 valet locker
+addParking -member_A 2025-05-12 06:00 9.0 valet cable
+addEvent -member_A 2025-05-16 13:00 9.0 cable inflation
+addParking -member_B 2025-05-14 21:00 7.0 valet locker
+addReservation -member_A 2025-05-13 04:00 9.0 battery cable
+addParking -member_A 2025-05-13 14:00 6.0 umbrella valet
+addParking -member_C 2025-05-14 08:00 3.0 cable umbrella
+addEvent -member_D 2025-05-12 16:00 6.0 valet battery
+addEvent -member_A 2025-05-15 15:00 9.0 inflation locker
+addParking -member_C 2025-05-12 18:00 9.0 inflation battery
+addReservation -member_A 2025-05-12 13:00 2.0 inflation cable
+addReservation -member_D 2025-05-10 01:00 4.0 locker umbrella
+addReservation -member_B 2025-05-12 22:00 7.0 valet cable
+addEvent -member_A 2025-05-11 00:00 8.0 cable umbrella
+addEvent -member_D 2025-05-10 02:00 7.0 inflation cable
+addReservation -member_E 2025-05-13 11:00 8.0 inflation battery
+addEvent -member_B 2025-05-16 01:00 5.0 locker umbrella
+addReservation -member_C 2025-05-11 10:00 8.0 inflation umbrella
+addEvent -member_C 2025-05-10 06:00 9.0 battery valet
+addEvent -member_D 2025-05-14 15:00 8.0 inflation battery
+addEvent -member_B 2025-05-13 19:00 5.0 umbrella valet
+addReservation -member_B 2025-05-10 20:00 0.0 battery valet
+addReservation -member_A 2025-05-15 18:00 5.0 valet cable
+addEvent -member_B 2025-05-12 06:00 3.0 inflation cable
+addParking -member_A 2025-05-10 17:00 1.0 umbrella cable
+addParking -member_D 2025-05-10 10:00 9.0 valet umbrella
+addParking -member_A 2025-05-14 23:00 6.0 locker valet
+addReservation -member_E 2025-05-11 18:00 5.0 inflation valet
+addParking -member_A 2025-05-14 18:00 5.0 locker inflation
+addParking -member_A 2025-05-16 06:00 6.0 inflation umbrella
+addReservation -member_C 2025-05-11 10:00 8.0 inflation battery
+addParking -member_B 2025-05-16 19:00 2.0 locker umbrella
+addReservation -member_B 2025-05-11 10:00 9.0 umbrella valet
+addEvent -member_B 2025-05-16 05:00 9.0 inflation cable
+addEvent -member_B 2025-05-14 10:00 0.0 battery locker
+addEvent -member_B 2025-05-16 20:00 9.0 inflation locker
+addParking -member_B 2025-05-15 02:00 5.0 cable battery
+addReservation -member_E 2025-05-12 02:00 5.0 battery locker
+addReservation -member_E 2025-05-10 06:00 2.0 battery locker
+addParking -member_B 2025-05-11 22:00 5.0 locker inflation
+addReservation -member_A 2025-05-14 04:00 10.0 inflation cable
+addReservation -member_D 2025-05-16 20:00 3.0 umbrella cable
+addParking -member_A 2025-05-12 07:00 6.0 inflation valet
+addReservation -member_B 2025-05-10 22:00 2.0
+addReservation -member_F 2025-05-13 09:00 21.0
+addEvent -member_F 2025-05-14 07:00 2.0
+addParking -member_E 2025-05-14 00:00 0.0
+addEvent -member_F 2025-05-10 20:00 14.0
+addParking -member_E 2025-05-16 05:00 24.0
+addParking -member_C 2025-05-14 09:00 14.0
+addEvent -member_C 2025-05-11 16:00 24.0
+addReservation -member_D 2025-05-11 02:00 24.0
+addReservation -member_C 2025-05-12 16:00 19.0
+addParking -member_B 2025-05-11 22:00 1.0
+addReservation -member_E 2025-05-16 22:00 20.0
+addReservation -member_E 2025-05-10 19:00 0.0
+addEvent -member_D 2025-05-17 06:00 15.0
+addEvent -member_D 2025-05-11 18:00 16.0
+addParking -member_B 2025-05-16 20:00 21.0
+addEvent -member_A 2025-05-12 21:00 15.0
+addEvent -member_B 2025-05-11 20:00 18.0
+addEvent -member_C 2025-05-12 22:00 19.0
+addEvent -member_F 2025-05-13 17:00 19.0
+addReservation -member_C 2025-05-12 18:00 0.0
+addEvent -member_F 2025-05-15 05:00 20.0
+addEvent -member_E 2025-05-16 12:00 13.0
+addParking -member_E 2025-05-14 06:00 0.0
+addEvent -member_F 2025-05-11 23:00 4.0
+addEvent -member_F 2025-05-16 15:00 11.0
+addParking -member_C 2025-05-14 07:00 9.0
+addParking -member_E 2025-05-13 05:00 6.0
+addParking -member_E 2025-05-16 07:00 18.0
+addReservation -member_B 2025-05-14 12:00 24.0
+addReservation -member_E 2025-05-16 02:00 0.0
+addParking -member_B 2025-05-10 16:00 22.0
+addReservation -member_B 2025-05-15 09:00 24.0
+addEvent -member_B 2025-05-11 08:00 8.0
+addParking -member_D 2025-05-16 02:00 12.0
+addParking -member_F 2025-05-11 06:00 16.0
+addEvent -member_D 2025-05-16 15:00 4.0
+addReservation -member_F 2025-05-13 10:00 13.0
+addEvent -member_C 2025-05-16 15:00 19.0
+addEvent -member_A 2025-05-10 11:00 7.0
+addReservation -member_F 2025-05-10 23:00 13.0
+addParking -member_A 2025-05-10 15:00 3.0
+addEvent -member_A 2025-05-15 15:00 16.0
+addReservation -member_B 2025-05-17 18:00 3.0
+addEvent -member_D 2025-05-13 23:00 14.0
+addEvent -member_B 2025-05-14 21:00 21.0
+addReservation -member_A 2025-05-16 21:00 5.0
+addEvent -member_E 2025-05-17 13:00 7.0
+addEvent -member_D 2025-05-17 21:00 18.0
+addReservation -member_B 2025-05-10 16:00 21.0
+addParking -member_A 2025-05-13 14:00 16.0
+addParking -member_D 2025-05-13 12:00 8.0
+addParking -member_F 2025-05-12 23:00 10.0
+addParking -member_B 2025-05-18 20:00 6.0
+addParking -member_D 2025-05-10 23:00 10.0
+addEvent -member_C 2025-05-17 11:00 8.0
+addEvent -member_D 2025-05-17 23:00 18.0
+addReservation -member_C 2025-05-17 02:00 13.0
+addReservation -member_C 2025-05-17 13:00 5.0
+addEvent -member_D 2025-05-13 05:00 16.0
+addReservation -member_C 2025-05-16 13:00 10.0
+addEvent -member_F 2025-05-11 17:00 10.0
+addEvent -member_B 2025-05-10 00:00 12.0
+addReservation -member_C 2025-05-15 05:00 18.0
+addEvent -member_F 2025-05-12 02:00 16.0
+addEvent -member_E 2025-05-12 23:00 4.0
+addReservation -member_F 2025-05-16 18:00 3.0
+addReservation -member_B 2025-05-13 06:00 10.0
+addReservation -member_A 2025-05-11 01:00 17.0
+addParking -member_D 2025-05-12 00:00 11.0
+addReservation -member_E 2025-05-16 21:00 4.0
+addParking -member_A 2025-05-15 19:00 18.0
+addReservation -member_B 2025-05-17 04:00 18.0
+addEvent -member_A 2025-05-11 17:00 4.0
+addEvent -member_C 2025-05-16 21:00 24.0
+addReservation -member_D 2025-05-16 06:00 4.0
+addEvent -member_B 2025-05-17 19:00 15.0
+addParking -member_D 2025-05-12 16:00 8.0
+addReservation -member_E 2025-05-14 04:00 1.0
+addParking -member_E 2025-05-12 15:00 1.0
+addParking -member_E 2025-05-13 23:00 14.0
+addReservation -member_F 2025-05-12 01:00 1.0
+addParking -member_F 2025-05-12 03:00 20.0
+addReservation -member_C 2025-05-12 12:00 18.0
+addParking -member_E 2025-05-14 04:00 13.0
+addReservation -member_D 2025-05-14 06:00 0.0
+addParking -member_B 2025-05-16 07:00 2.0
+addParking -member_B 2025-05-13 03:00 15.0
+addParking -member_E 2025-05-15 05:00 7.0
+addEvent -member_B 2025-05-14 10:00 15.0
+addEvent -member_A 2025-05-16 20:00 13.0
+addReservation -member_C 2025-05-11 02:00 6.0
+addEvent -member_F 2025-05-14 01:00 15.0
+addReservation -member_D 2025-05-11 03:00 5.0
+addParking -member_A 2025-05-16 20:00 0.0
+addEvent -member_D 2025-05-17 18:00 6.0
+addReservation -member_C 2025-05-10 01:00 0.0
+addParking -member_C 2025-05-12 09:00 19.0
+addParking -member_F 2025-05-10 03:00 21.0
+addParking -member_A 2025-05-17 03:00 21.0
+addParking -member_A 2025-05-11 21:00 8.0
+addParking -member_B 2025-05-13 22:00 0.0
+addReservation -member_A 2025-05-11 16:00 10.0
+addEvent -member_D 2025-05-16 20:00 1.0
+addParking -member_D 2025-05-14 19:00 9.0
+addEvent -member_B 2025-05-12 03:00 9.0
+addParking -member_C 2025-05-14 01:00 9.0
+addEvent -member_A 2025-05-13 04:00 2.0
+addEvent -member_A 2025-05-12 02:00 4.0
+addReservation -member_C 2025-05-15 06:00 5.0
+addReservation -member_C 2025-05-10 05:00 3.0
+addEvent -member_A 2025-05-11 13:00 7.0
+addReservation -member_A 2025-05-16 18:00 2.0
+addParking -member_A 2025-05-13 19:00 4.0
+addParking -member_C 2025-05-13 01:00 4.0
+addEvent -member_A 2025-05-16 04:00 1.0
+addParking -member_A 2025-05-16 16:00 10.0
+addParking -member_C 2025-05-10 11:00 10.0
+addEvent -member_D 2025-05-16 10:00 8.0
+addEvent -member_D 2025-05-13 19:00 2.0
+addReservation -member_B 2025-05-14 16:00 0.0
+addReservation -member_E 2025-05-10 12:00 0.0
+addEvent -member_C 2025-05-14 14:00 3.0
+addEvent -member_A 2025-05-16 06:00 3.0
+addReservation -member_D 2025-05-16 09:00 7.0
+addEvent -member_B 2025-05-10 05:00 5.0
+addEvent -member_A 2025-05-13 04:00 9.0
+addReservation -member_D 2025-05-16 08:00 3.0
+addEvent -member_E 2025-05-13 10:00 5.0
+addReservation -member_A 2025-05-11 19:00 9.0
+addReservation -member_B 2025-05-13 11:00 2.0
+addReservation -member_A 2025-05-11 22:00 7.0
+addParking -member_D 2025-05-12 01:00 0.0
+addReservation -member_E 2025-05-15 23:00 9.0
+addParking -member_B 2025-05-10 00:00 4.0
+addParking -member_D 2025-05-11 07:00 9.0
+addReservation -member_E 2025-05-16 08:00 9.0
+addReservation -member_E 2025-05-11 15:00 9.0
+addEvent -member_D 2025-05-13 17:00 4.0
+addParking -member_D 2025-05-13 16:00 8.0
+addParking -member_A 2025-05-14 20:00 4.0
+addParking -member_E 2025-05-16 19:00 1.0
+addEvent -member_B 2025-05-10 16:00 10.0
+addReservation -member_C 2025-05-11 16:00 9.0
+addParking -member_A 2025-05-15 02:00 5.0
+addParking -member_D 2025-05-15 11:00 6.0
+addReservation -member_B 2025-05-12 10:00 1.0
+addEvent -member_A 2025-05-14 15:00 7.0
+addParking -member_C 2025-05-13 22:00 8.0
+addParking -member_E 2025-05-14 10:00 7.0
+addEvent -member_E 2025-05-15 19:00 6.0
+addParking -member_E 2025-05-15 17:00 7.0
+addEvent -member_E 2025-05-11 00:00 5.0
+addReservation -member_C 2025-05-10 03:00 0.0
+addParking -member_C 2025-05-11 19:00 10.0
+addReservation -member_A 2025-05-15 19:00 8.0
+addReservation -member_B 2025-05-13 05:00 0.0
+addReservation -member_E 2025-05-11 21:00 3.0
+addParking -member_C 2025-05-14 17:00 1.0
+addParking -member_D 2025-05-10 16:00 8.0
+addEvent -member_D 2025-05-13 09:00 10.0
+addParking -member_D 2025-05-12 19:00 2.0
+addReservation -member_A 2025-05-11 14:00 6.0
+addReservation -member_B 2025-05-14 18:00 6.0
+addParking -member_C 2025-05-16 16:00 4.0
+addEvent -member_B 2025-05-14 19:00 6.0
+addReservation -member_A 2025-05-11 03:00 5.0
+addEvent -member_A 2025-05-14 14:00 4.0
+addReservation -member_C 2025-05-11 21:00 4.0
+addReservation -member_E 2025-05-10 06:00 8.0
+addParking -member_A 2025-05-12 01:00 5.0
+addParking -member_B 2025-05-15 17:00 6.0
+addParking -member_E 2025-05-12 06:00 4.0
+addParking -member_D 2025-05-13 04:00 3.0
+addParking -member_B 2025-05-13 14:00 3.0
+addReservation -member_D 2025-05-11 19:00 8.0
+addReservation -member_C 2025-05-16 19:00 2.0
+addReservation -member_D 2025-05-10 15:00 10.0
+addReservation -member_D 2025-05-12 05:00 0.0
+addEvent -member_B 2025-05-11 00:00 7.0
+addEvent -member_C 2025-05-14 23:00 1.0
+addReservation -member_D 2025-05-12 18:00 0.0
+addParking -member_D 2025-05-10 11:00 8.0
+addReservation -member_B 2025-05-15 18:00 7.0
+addEvent -member_E 2025-05-13 13:00 0.0
+addParking -member_C 2025-05-13 09:00 2.0
+addEvent -member_D 2025-05-14 20:00 3.0
+addReservation -member_A 2025-05-10 23:00 5.0
+addReservation -member_D 2025-05-13 21:00 10.0
+addReservation -member_B 2025-05-16 07:00 9.0
+addEvent -member_A 2025-05 02:00 0.0
+addParking -member_A 2025-05-12 00:00 1.0
+addReservation -member_A 2025-05-11 22:00 8.0
+addEvent -member_B 2025-05-16 06:00 7.0
+addEvent -member_A 2025-05-12 00:00 1.0
+addEvent -member_C 2025-05-12 16:00 9.0
+addReservation -member_D 2025-05-14 09:00 10.0
+addEvent -member_E 2025-05-13 23:00 7.0
+addEvent -member_A 2025-05-11 17:00 0.0
+addParking -member_C 2025-05-11 19:00 9.0
+addEvent -member_C 2025-05-18 23:00 1.0
+addParking -member_B 2025-05-17 12:00 4.0
+addReservation -member_F 2025-05-17 03:00 4.0
+addReservation -member_A 2025-05-11 08:00 0.0
+addParking -member_C 2025-05-13 15:00 1.0
+addReservation -member_C 2025-05-15 03:00 7.0
+addReservation -member_E 2025-05-12 15:00 8.0
+addParking -member_B 2025-05-17 03:00 2.0
+addParking -member_F 2025-05-13 23:00 3.0
+addParking -member_E 2025-05-17 15:00 8.0
+addParking -member_B 2025-05-15 01:00 4.0
+addEvent -member_D 2025-05-12 08:00 6.0
+addParking -member_B 2025-05-15 20:00 2.0
+addReservation -member_A 2025-05-15 03:00 9.0
+addReservation -member_E 2025-05-13 23:00 10.0
+addEvent -member_F 2025-05-10 08:00 0.0
+addEvent -member_D 2025-05-14 18:00 6.0
+addReservation -member_C 2025-05-16 02:00 5.0
+addEvent -member_D 2025-05-12 22:00 3.0
+addParking -member_E 2025-05-17 23:00 2.0
+addEvent -member_D 2025-05-12 11:00 7.0
+addReservation -member_C 2025-05-13 04:00 3.0
+addEvent -member_E 2025-05-14 07:00 10.0
+addEvent -member_B 2025-05-11 07:00 5.0
+addReservation -member_D 2025-05-14 22:00 4.0
+addReservation -member_A 2025-05-16 21:00 9.0
+addReservation -member_D 2025-05-18 16:00 5.0
+addEvent -member_A 2025-05-10 02:00 10.0
+addParking -member_B 2025-05-13 12:00 6.0
+addParking -member_B 2025-05-18 01:00 6.0
+addEvent -member_F 2025-05-16 02:00 10.0
+addParking -member_C 2025-05-13 04:00 9.0
+addReservation -member_A 2025-05-16 22:00 3.0
+addParking -member_A 2025-05-15 13:00 9.0
+addParking -member_C 2025-05-14 01:00 5.0
+addEvent -member_B 2025-05-15 07:00 7.0
+addReservation -member_E 2025-05-18 01:00 6.0
+addParking -member_E 2025-05-13 11:00 0.0
+addEvent -member_B 2025-05-14 20:00 8.0
+addParking -member_F 2025-05-12 11:00 5.0
+addEvent -member_D 2025-05-16 19:00 3.0
+addReservation -member_A 2025-05-13 15:00 5.0
+addReservation -member_F 2025-05-10 22:00 8.0
+addParking -member_E 2025-05-12 23:00 2.0
+addReservation -member_E 2025-05-12 22:00 8.0
+addReservation -member_D 2025-05-17 04:00 7.0
+addParking -member_B 2025-05-14 14:00 3.0
+addParking -member_E 2025-05-18 00:00 3.0
+addEvent -member_C 2025-05-15 08:00 8.0
+addReservation -member_E 2025-05-10 12:00 9.0
+addEvent -member_A 2025-05-17 10:00 9.0
+addReservation -member_E 2025-05-17 19:00 4.0
+addParking -member_C 2025-05-17 11:00 7.0
+addReservation -member_C 2025-05-11 05:00 10.0
+addEvent -member_F 2025-05-12 15:00 5.0
+addEvent -member_E 2025-05-11 01:00 5.0
+addReservation -member_C 2025-05-17 17:00 2.0
+addParking -member_D 2025-05-11 14:00 1.0
+addEvent -member_B 2025-05-10 11:00 1.0
+addReservation -member_D 2025-05-10 13:00 8.0
+addParking -member_A 2025-05-10 03:00 3.0
+addReservation -member_A 2025-05-10 04:00 1.0
+addReservation -member_B 2025-05-17 10:00 1.0
+addEvent -member_D 2025-05-10 04:00 7.0
+addEvent -member_F 2025-05-10 22:00 3.0
+addEvent -member_E 2025-05-18 00:00 7.0
+addEvent -member_E 2025-05-14 18:00 2.0
+addParking -member_F 2025-05-13 01:00 2.0
+addEvent -member_B 2025-05-16 14:00 2.0
+addParking -member_E 2025-05-11 02:00 6.0
+addEvent -member_D 2025-05-11 00:00 8.0
+addReservation -member_A 2025-05-11 03:00 4.0
+addParking -member_E 2025-05-18 09:00 1.0
+addEvent -member_E 2025-05-15 02:00 5.0
+addReservation -member_A 2025-05-13 07:00 9.0
+addReservation -member_E 2025-05-17 00:00 6.0
+addParking -member_D 2025-05-16 15:00 10.0
+addEvent -member_D 2025-05-12 09:00 5.0
+addParking -member_B 2025-05-10 01:00 1.0
+addEvent -member_D 2025-05-18 05:00 9.0
+addEvent -member_E 2025-05-15 02:00 1.0
+addParking -member_A 2025-05-17 22:00 1.0
+addEvent -member_D 2025-05-18 18:00 0.0
+addEvent -member_A 2025-05-13 21:00 1.0
+addReservation -member_E 2025-05-15 05:00 3.0
+addReservation -member_A 2025-05-11 08:00 1.0
+addReservation -member_A 2025-05-14 23:00 8.0
+addEvent -member_D 2025-05-14 05:00 3.0
+addParking -member_D 2025-05-18 20:00 8.0
+addEvent -member_F 2025-05-14 23:00 7.0
+addEvent -member_C 2025-05-14 07:00 10.0
+addEvent -member_C 2025-05-18 07:00 9.0
+addEvent -member_D 2025-05-12 21:00 1.0
+addReservation -member_B 2025-05-10 13:00 0.0
+addReservation -member_A 2025-05-15 23:00 5.0
+addEvent -member_C 2025-05-18 13:00 9.0
+addReservation -member_E 2025-05-18 01:00 0.0
+addParking -member_E 2025-05-12 10:00 2.0
+addEvent -member_B 2025-05-12 08:00 10.0
+addEvent -member_B 2025-05-11 20:00 5.0
+addEvent -member_C 2025-05-11 11:00 4.0 valet battery
+addReservation -member_D 2025-05-13 22:00 5.0 valet cable
+addReservation -member_D 2025-05-13 07:00 10.0 battery umbrella
+addParking -member_A 2025-05-12 18:00 10.0 valet umbrella
+addReservation -member_B 2025-05-13 19:00 3.0 battery valet
+addEvent -member_A 2025-05-13 23:00 8.0 cable inflation
+addReservation -member_A 2025-05-14 11:00 5.0 locker cable
+addEvent -member_B 2025-05-13 14:00 8.0 umbrella cable
+addParking -member_C 2025-05-12 11:00 9.0 cable valet
+addEvent -member_D 2025-05-11 10:00 10.0 locker battery
+addParking -member_D 2025-05-10 13:00 5.0 umbrella battery
+addEvent -member_F 2025-05-15 20:00 6.0 umbrella cable
+addReservation -member_D 2025-05-11 04:00 9.0 battery inflation
+addParking -member_C 2025-05-16 08:00 9.0 cable inflation
+addReservation -member_F 2025-05-16 12:00 8.0 umbrella valet
+addReservation -member_E 2025-05-10 14:00 5.0 umbrella cable
+addEvent -member_C 2025-05-16 07:00 0.0 cable valet
+addReservation -member_A 2025-05-17 10:00 8.0 umbrella battery
+addEvent -member_C 2025-05-14 11:00 1.0 umbrella locker
+addEvent -member_A 2025-05-10 18:00 10.0 valet locker
+addParking -member_E 2025-05-16 08:00 3.0 valet cable
+addEvent -member_B 2025-05-13 13:00 8.0 cable battery
+addEvent -member_B 2025-05-17 06:00 5.0 umbrella cable
+addParking -member_E 2025-05-10 15:00 6.0 battery umbrella
+addReservation -member_E 2025-05-16 11:00 8.0 inflation umbrella
+addEvent -member_C 2025-05-11 04:00 10.0 umbrella inflation
+addEvent -member_F 2025-05-15 09:00 8.0 battery inflation
+addEvent -member_A 2025-05-16 16:00 1.0 battery umbrella
+addReservation -member_D 2025-05-11 10:00 9.0 cable inflation
+addParking -member_A 2025-05-17 20:00 4.0 inflation locker
+addParking -member_E 2025-05-13 11:00 6.0 cable battery
+addEvent -member_C 2025-05-11 16:00 7.0 inflation cable
+addEvent -member_B 2025-05-17 09:00 7.0 valet locker
+addReservation -member_C 2025-05-11 22:00 2.0 cable valet
+addParking -member_C 2025-05-10 22:00 6.0 inflation cable
+addEvent -member_C 2025-05-16 07:00 5.0 inflation valet
+addReservation -member_C 2025-05-10 18:00 4.0 inflation umbrella
+addReservation -member_B 2025-05-10 20:00 8.0 umbrella locker
+addReservation -member_D 2025-05-10 15:00 8.0 inflation valet
+addReservation -member_E 2025-05-12 19:00 5.0 locker inflation
+addEvent -member_A 2025-05-16 10:00 8.0 battery umbrella
+addEvent -member_D 2025-05-13 00:00 2.0 inflation umbrella
+addReservation -member_F 2025-05-16 22:00 10.0 battery valet
+addParking -member_D 2025-05-11 21:00 3.0 cable battery
+addParking -member_F 2025-05-15 08:00 0.0 umbrella valet
+addEvent -member_E 2025-05-12 16:00 6.0 umbrella battery
+addEvent -member_D 2025-05-11 14:00 6.0 inflation battery
+addEvent -member_A 2025-05-12 09:00 10.0 locker cable
+addEvent -member_F 2025-05-17 20:00 1.0 battery cable
+addEvent -member_B 2025-05-13 06:00 5.0 valet battery
+addParking -member_D 2025-05-13 00:00 7.0 valet cable
+addEvent -member_C 2025-05-14 05:00 5.0 valet inflation
+addReservation -member_D 2025-05-17 10:00 0.0 umbrella battery
+addEvent -member_E 2025-05-11 15:00 4.0 cable valet
+addParking -member_F 2025-05-12 00:00 6.0 locker inflation
+addEvent -member_E 2025-05-17 04:00 10.0 cable battery
+addEvent -member_C 2025-05-10 17:00 7.0 valet locker
+addParking -member_F 2025-05-14 09:00 0.0 inflation battery
+addParking -member_F 2025-05-12 21:00 7.0 battery inflation
+addReservation -member_D 2025-05-15 22:00 7.0 inflation battery
+addReservation -member_A 2025-05-13 04:00 8.0 inflation cable
+addParking -member_C 2025-05-16 12:00 7.0 inflation valet
+addEvent -member_E 2025-05-10 22:00 1.0 valet locker
+addEvent -member_E 2025-05-14 11:00 10.0 locker umbrella
+addReservation -member_E 2025-05-17 08:00 1.0 locker cable
+addReservation -member_C 2025-05-17 11:00 4.0 valet locker
+addEvent -member_E 2025-05-15 01:00 3.0 battery locker
+addReservation -member_A 2025-05-16 11:00 1.0 locker inflation
+addEvent -member_F 2025-05-15 15:00 8.0 inflation umbrella
+addParking -member_C 2025-05-10 21:00 7.0 battery umbrella
+addReservation -member_D 2025-05-17 05:00 1.0 cable locker
+addEvent -member_F 2025-05-12 11:00 5.0 battery inflation
+addReservation -member_A 2025-05-12 19:00 4.0 umbrella inflation
+addReservation -member_C 2025-05-17 18:00 9.0 battery cable
+addEvent -member_A 2025-05-13 13:00 3.0 cable inflation
+addParking -member_C 2025-05-12 01:00 4.0 valet locker
+addParking -member_E 2025-05-15 06:00 9.0 umbrella valet
+addParking -member_C 2025-05-12 22:00 2.0 locker valet
+addReservation -member_D 2025-05-10 18:00 1.0 valet locker
+addReservation -member_B 2025-05-14 13:00 5.0 locker valet
+addReservation -member_B 2025-05-14 18:00 2.0 cable valet
+addEvent -member_C 2025-05-11 22:00 3.0 inflation battery
+addReservation -member_B 2025-05-14 12:00 10.0 valet locker
+addReservation -member_F 2025-05-15 20:00 1.0 cable umbrella
+addEvent -member_B 2025-05-11 17:00 6.0 valet cable
+addParking -member_B 2025-05-17 10:00 5.0 battery cable
+addParking -member_A 2025-05-16 14:00 5.0 valet cable
+addParking -member_E 2025-05-15 02:00 6.0 valet inflation
+addReservation -member_D 2025-05-10 21:00 9.0 valet umbrella
+addParking -member_A 2025-05-14 12:00 6.0 cable battery
+addEvent -member_A 2025-05-14 17:00 3.0 inflation locker
+addEvent -member_E 2025-05-17 12:00 8.0 locker cable
+addParking -member_E 2025-05-15 12:00 8.0 battery umbrella
+addReservation -member_A 2025-05-16 12:00 10.0 inflation locker
+addParking -member_E 2025-05-11 02:00 10.0 inflation umbrella
+addReservation -member_F 2025-05-12 07:00 1.0 cable locker
+addEvent -member_A 2025-05-10 08:00 5.0 valet locker
+addEvent -member_A 2025-05-11 15:00 8.0 battery cable
+addEvent -member_F 2025-05-11 17:00 5.0 umbrella inflation
+addParking -member_B 2025-05-13 10:00 0.0 battery umbrella
+
+
+
+

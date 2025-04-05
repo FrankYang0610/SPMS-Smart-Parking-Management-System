@@ -121,11 +121,13 @@ void parse_input(const char tokens[8][100], Request* req) {
             return;
         }
 
+        /* deprecated for old latern version
         if (essentials_cnt == 2 && !is_valid_essentials_pair(bbb, ccc)) {
             req->type = INVALID;
             printf("[addParking] Invalid Essentials Pair: %s %s\n", bbb, ccc);
             return;
         }
+        */
 
         req->parking = true;
         req->essential = 0;
@@ -148,15 +150,18 @@ void parse_input(const char tokens[8][100], Request* req) {
             return;
         }
 
+        /* deprecated for old latern version
         if (!is_valid_essentials_pair(bbb, ccc)) {
             req->type = INVALID;
             printf("[addReservation] Invalid Essentials Pair: %s %s\n", bbb, ccc);
             return;
         }
+        */
 
         req->parking = true; 
         req->essential = 0;
         add_essential_value(&(req->essential), bbb);
+        add_essential_value(&(req->essential), ccc);
         return;
     }
     
