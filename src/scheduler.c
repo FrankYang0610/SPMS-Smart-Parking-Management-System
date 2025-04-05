@@ -115,6 +115,7 @@ void run_opti(Vector* queue, Statistics* stats, Tracker* tracker) {
     /* Start SA */
 
     while (opti_running()) {
+        // printf("DEBUG: Iteration %d\n", it++);
         vector_qsort(rejected, 0, rejected->size - 1, cmp_volume_cnt);
         opti_delete(rejected, accepted, tracker);
         // printf("DEBUG: delete\n");

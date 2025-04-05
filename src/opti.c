@@ -16,12 +16,11 @@ static const double P = 0.9;
 static const double Q = 0.3;
 static const double INI_P = 0.99;
 static const double END_P = 0.01;
-static const int MAX_STEPS = 10000;
+static const int MAX_STEPS = 1000;
 
 static Vector* pre_accepted = NULL;
 static Vector* pre_rejected = NULL;
 static Tracker* pre_tracker = NULL;
-
 static Vector* best_accepted = NULL;
 static Vector* best_rejected = NULL;
 
@@ -62,21 +61,18 @@ void opti_reset() {
     assert(T_min < T_max && T_max - T_min + 1 == 10080);
     assert(INI_P <= 1.0);
 
-    if (pre_accepted) {
-        vector_free(pre_accepted);
-        vector_free(pre_rejected);
-        vector_free(best_accepted);
-        vector_free(best_rejected);
-    } else {
-        pre_accepted = malloc(sizeof(Vector));
-        pre_rejected = malloc(sizeof(Vector));
-        pre_tracker = malloc(sizeof(Tracker));
-        best_accepted = malloc(sizeof(Vector));
-        best_rejected = malloc(sizeof(Vector));
-        vector_init(pre_accepted);
-        vector_init(pre_rejected);
-        init_tracker(pre_tracker);
-    }
+    assert(pre_accepted == NULL && pre_rejected == NULL && pre_tracker == NULL && best_accepted == NULL && best_rejected == NULL);
+
+    pre_accepted = malloc(sizeof(Vector));
+    pre_rejected = malloc(sizeof(Vector));
+    pre_tracker = malloc(sizeof(Tracker));
+    best_accepted = malloc(sizeof(Vector));
+    best_rejected = malloc(sizeof(Vector));
+    vector_init(pre_accepted);
+    vector_init(pre_rejected);
+    vector_init(best_accepted);
+    vector_init(best_rejected);
+    init_tracker(pre_tracker);
 
     double ref = -0.1;  // reference new_e - e
     double eps = 1e-9;
