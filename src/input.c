@@ -115,19 +115,36 @@ void parse_input(const char tokens[8][100], Request* req) {
 
         int essentials_cnt = (bool)(strlen(bbb)) + (bool)(strlen(ccc)); // how many essentials parameter
 
+        /* deprecated for old latern version
         if (essentials_cnt && get_valid_pair(bbb) == NULL) {
             req->type = INVALID;
             printf("[addParking] Invalid Essential Item: %s\n", bbb);
             return;
         }
 
-        /* deprecated for old latern version
         if (essentials_cnt == 2 && !is_valid_essentials_pair(bbb, ccc)) {
             req->type = INVALID;
             printf("[addParking] Invalid Essentials Pair: %s %s\n", bbb, ccc);
             return;
         }
         */
+
+        if (essentials_cnt >= 1) {
+            if (!is_valid_essentials(bbb)) {
+                req->type = INVALID;
+                printf("[addParking] Invalid Essential Item: %s (len = %d)\n", bbb, (int)strlen(bbb));
+                return;
+            }
+        }
+
+        if (essentials_cnt == 2) {
+            if (!is_valid_essentials(ccc)) {
+                req->type = INVALID;
+                printf("[addParking] Invalid Essential Item: %s (len = %d)\n", ccc, (int)strlen(ccc));
+                return;
+            }
+        }
+
 
         req->parking = true;
         req->essential = 0;
@@ -144,19 +161,35 @@ void parse_input(const char tokens[8][100], Request* req) {
         
         int essentials_cnt = (bool)(strlen(bbb)) + (bool)(strlen(ccc));
 
+        /* deprecated for old latern version
         if (essentials_cnt != 2) {
             req->type = INVALID;
             printf("[addReservation] Invalid Number of Essentials: Received %d arguments, expected 2\n", essentials_cnt);
             return;
         }
 
-        /* deprecated for old latern version
         if (!is_valid_essentials_pair(bbb, ccc)) {
             req->type = INVALID;
             printf("[addReservation] Invalid Essentials Pair: %s %s\n", bbb, ccc);
             return;
         }
         */
+
+        if (essentials_cnt > 1) {
+            if (!is_valid_essentials(bbb)) {
+                req->type = INVALID;
+                printf("[addReservation] Invalid Essential Item: %s (len = %d)\n", bbb, (int)strlen(bbb));
+                return;
+            }
+        }
+
+        if (essentials_cnt == 2) {
+            if (!is_valid_essentials(ccc)) {
+                req->type = INVALID;
+                printf("[addReservation] Invalid Essential Item: %s (len = %d)\n", ccc, (int)strlen(ccc));
+                return;
+            }
+        }
 
         req->parking = true; 
         req->essential = 0;
@@ -170,9 +203,9 @@ void parse_input(const char tokens[8][100], Request* req) {
         // parking  + essentials (optional)
     
         for (int i = 5; i <= 7; i++) {
-            if (tokens[i][0] && get_valid_pair(tokens[i]) == NULL) {
+            if (tokens[i][0] != '\0' && is_valid_essentials(tokens[i])) {
                 req->type = INVALID;
-                printf("[addEvent] Invalid Essential Item: %s\n", tokens[i]);
+                printf("[addEvent] Invalid Essential Item: %s (len = %d)\n", tokens[i], (int)strlen(tokens[i]));
                 return;
             }
         }
@@ -201,9 +234,9 @@ void parse_input(const char tokens[8][100], Request* req) {
             return;
         }
 
-        if (get_valid_pair(bbb) == NULL) {
+        if (!is_valid_essentials(bbb)) {
             req->type = INVALID;
-            printf("[bookEssentials] Invalid Essential Item: %s\n", bbb);
+            printf("[bookEssentials] Invalid Essential Item: %s (len = %d)\n", bbb, (int)strlen(bbb));
             return;
         }
 

@@ -16,15 +16,19 @@ static const double P = 0.9;
 static const double Q = 0.3;
 static const double INI_P = 0.99;
 static const double END_P = 0.01;
-static const int MAX_STEPS = 2000;
+static const int MAX_STEPS = 10000;
 
 static Vector* pre_accepted = NULL;
 static Vector* pre_rejected = NULL;
 static Tracker* pre_tracker = NULL;
 
+static Vector* best_accepted = NULL;
+static Vector* best_rejected = NULL;
+
 // the following needs reset everytime
 double decay, cur_t;
 int cur_step; 
+double best_util = 0.0;
 
 static double fast_pow(double base, int exponent) {
     if (!exponent) return 1.0;
@@ -36,6 +40,22 @@ static double fast_pow(double base, int exponent) {
     return sign ? 1.0 / res : res;
 }
 
+void opti_store_best(Vector* accepted, Vector* rejected, double new_util) {
+    if (new_util > best_util) {
+        best_util = new_util;
+        vector_overwrite(accepted, best_accepted);
+        vector_overwrite(rejected, best_rejected);
+    }
+}
+
+void opti_get_best_accepted(Vector* target) {
+    vector_overwrite(best_accepted, target);
+}
+
+void opti_get_best_rejected(Vector* target) {
+    vector_overwrite(best_rejected, target);
+}
+
 void opti_reset() {
     T_min = parse_time("2025-05-10", "00:00");
     T_max = parse_time("2025-05-16", "23:59");
@@ -45,10 +65,14 @@ void opti_reset() {
     if (pre_accepted) {
         vector_free(pre_accepted);
         vector_free(pre_rejected);
+        vector_free(best_accepted);
+        vector_free(best_rejected);
     } else {
         pre_accepted = malloc(sizeof(Vector));
         pre_rejected = malloc(sizeof(Vector));
         pre_tracker = malloc(sizeof(Tracker));
+        best_accepted = malloc(sizeof(Vector));
+        best_rejected = malloc(sizeof(Vector));
         vector_init(pre_accepted);
         vector_init(pre_rejected);
         init_tracker(pre_tracker);

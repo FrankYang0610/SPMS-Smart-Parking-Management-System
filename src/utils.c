@@ -26,9 +26,10 @@ void strip_no_semicolon(char* str) {
 
     assert(end >= start);
     size_t len = (unsigned)(end - start + 1);
-    memmove(str, start, len);
+    memmove(start, start, len);
     str[len] = '\0';
 }
+
 
 char** split(const char* str) {
     char** res = (char**)malloc(sizeof(char*) * 8);
@@ -50,6 +51,17 @@ char** split(const char* str) {
 
 
 void strip(char* str) {
+    if (str == NULL) return;
+    int start = 0, end = (int)strlen(str) - 1;
+    while (isspace(start)) start++; // Trim leading whitespace
+    while (end >= start && (isspace(str[end]) || str[end] == ';')) end--; // Trim trailing whitespace and semicolons
+    for (int i = start; i <= end; i++) {
+        str[i - start] = str[i];
+    }
+    str[end - start + 1] = '\0';
+}
+
+void strip1(char* str) {
     int n = (int)strlen(str);
     // printf("stripping \"%s\"\n", str);
     int i = 0, pre = 0;
@@ -142,6 +154,19 @@ const char* get_valid_pair(const char* essential) {
     if (compare(essential, "InflationService")) return "valetPark";
     if (compare(essential, "valetPark")) return "InflationService";
     return NULL;
+}
+
+bool is_valid_essentials(const char* essential) {
+    // return true if provided essential is valid, false otherwise
+    // valid essentials are: battery, cable, locker, umbrella, InflationService, valetPark
+
+    if (compare(essential, "battery")) return true;
+    if (compare(essential, "cable") || compare(essential, "cables")) return true;
+    if (compare(essential, "locker")) return true;
+    if (compare(essential, "umbrella")) return true;
+    if (compare(essential, "InflationService") || compare(essential, "inflation")) return true;
+    if (compare(essential, "valetPark") || compare(essential, "valet")) return true;
+    return false;
 }
 
 void add_essential_value(char* original_code, const char* essential) {

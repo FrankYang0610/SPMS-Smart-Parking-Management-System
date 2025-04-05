@@ -110,6 +110,7 @@ void run_opti(Vector* queue, Statistics* stats, Tracker* tracker) {
         opti_greedy(rejected, accepted, tracker, true);
         // printf("DEBUG: greedy\n");
         double tmp_util = opti_util(accepted);
+        opti_store_best(accepted, rejected, tmp_util);
         // printf("DEBUG: NEW UTIL = %.3lf\n", tmp_util);
         if (opti_accept(tmp_util, cur_util)) {
             cur_util = tmp_util;
@@ -124,6 +125,8 @@ void run_opti(Vector* queue, Statistics* stats, Tracker* tracker) {
         }
         opti_iter();
     }
+    opti_get_best_accepted(accepted);
+    opti_get_best_rejected(rejected);
     
     vector_qsort(rejected, 0, rejected->size - 1, cmp_volume_cnt);
     opti_greedy(rejected, accepted, tracker, false);

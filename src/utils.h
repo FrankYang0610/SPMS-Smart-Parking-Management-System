@@ -44,6 +44,7 @@ bool is_valid_essentials_pair(const char*, const char*);
 const char* get_valid_pair(const char*);
 void add_essential_value(char*, const char*);
 int get_priority(const char*);
+bool is_valid_essentials(const char*);
 
 bool try_put(int order, int start, int end, bool parking, char essential, Tracker* tracker);
 void try_delete(int order, int start, int end, bool parking, char essential, Tracker* tracker);

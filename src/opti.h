@@ -13,6 +13,10 @@ void opti_reset();
 void opti_rollback(Vector* rejected, Vector* accepted, Tracker* tracker);
 void opti_backup(Vector* rejected, Vector* accepted, Tracker* tracker);
 
+void opti_store_best(Vector* accepted, Vector* rejected, double new_util);
+void opti_get_best_accepted(Vector* target);
+void opti_get_best_rejected(Vector* target);
+
 /**
  * @brief Improved LJF Greedy algorithm. Move request from rejected to accepted, then resize.
  * @param rejected The vector of rejected requests (will decrease)
