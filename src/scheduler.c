@@ -24,6 +24,7 @@ bool process_batch(Vector* queue, Request* req, int* invalid_cnt) {
     // parse the batch file
     // add the requests to the queue
 
+    // int line_cnt = 0 , line_n = 0, lines[1000];
     const char* file = req->file;
     FILE* fp = fopen(file, "r");
 
@@ -34,6 +35,7 @@ bool process_batch(Vector* queue, Request* req, int* invalid_cnt) {
     
     while (!feof(fp)) {
         Request rq = file_input(fp);
+        // line_cnt++;
         switch (rq.type) {
             case BATCH: {
                 bool is_end = process_batch(queue, &rq, invalid_cnt);
@@ -47,6 +49,7 @@ bool process_batch(Vector* queue, Request* req, int* invalid_cnt) {
                 process_request(queue, &rq);
                 break;
             case PRINT:
+                printf("PRINTING\n");
                 if (fork() == 0) {
                     schedule_and_print_bookings(req->algo, queue, *invalid_cnt);
                     exit(0);
@@ -56,11 +59,19 @@ bool process_batch(Vector* queue, Request* req, int* invalid_cnt) {
                 break;
             case INVALID:
                 (*invalid_cnt)++;
+                // lines[line_n++] = line_cnt;
                 break;
             default:
                 break;
         }
     }
+
+    /* DEBUG CODE
+    printf("DEBUG: INVALID REQUESTS LINE NUMBER: ");
+    for (int i = 0; i < line_n; i++) {
+        printf("line %d\n", lines[i]);
+    }
+    */
 
     return false;
 }
