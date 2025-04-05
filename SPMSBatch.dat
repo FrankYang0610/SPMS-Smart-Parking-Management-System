@@ -498,7 +498,3 @@ addEvent -member_A 2025-05-10 08:00 5.0 valet locker
 addEvent -member_A 2025-05-11 15:00 8.0 battery cable
 addEvent -member_F 2025-05-11 17:00 5.0 umbrella inflation
 addParking -member_B 2025-05-13 10:00 0.0 battery umbrella
-
-
-
-

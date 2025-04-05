@@ -18,6 +18,7 @@ Request fetch_input() {
 Request file_input(FILE* file) {
     char input[1000];
     if (fgets(input, 1000, file) != NULL) {
+        // printf("Preprocessing: [[%s]]\n", input);
         return preprocess_input(input);
     }
     return (Request){INVALID, 0, 0, 0, 0, 0, 0, 0, NULL, NULL}; // or use {.type = INVALID} in C99 and later.
@@ -203,7 +204,7 @@ void parse_input(const char tokens[8][100], Request* req) {
         // parking  + essentials (optional)
     
         for (int i = 5; i <= 7; i++) {
-            if (tokens[i][0] != '\0' && is_valid_essentials(tokens[i])) {
+            if (tokens[i][0] != '\0' && !is_valid_essentials(tokens[i])) {
                 req->type = INVALID;
                 printf("[addEvent] Invalid Essential Item: %s (len = %d)\n", tokens[i], (int)strlen(tokens[i]));
                 return;
