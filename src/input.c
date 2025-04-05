@@ -18,7 +18,7 @@ Request fetch_input() {
 Request file_input(FILE* file) {
     char input[1000];
     if (fgets(input, 1000, file) != NULL) {
-        // printf("Preprocessing: [[%s]]\n", input);
+        //printf("Preprocessing: [[%s]]\n", input);
         return preprocess_input(input);
     }
     return (Request){INVALID, 0, 0, 0, 0, 0, 0, 0, NULL, NULL}; // or use {.type = INVALID} in C99 and later.
@@ -99,7 +99,7 @@ void parse_input(const char tokens[8][100], Request* req) {
 
     if (start + duration - 1 > parse_time("2025-05-16", "23:59")) {
         req->type = INVALID;
-        printf("Invalid Time: %s %s exceeds 2025-05-16\n", tokens[2], tokens[3]);
+        printf("Invalid Time: %s %s + duration=%s exceeds 2025-05-16 23:59\n", tokens[2], tokens[3], tokens[4]);
         return;
     }
 
